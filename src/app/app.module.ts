@@ -90,9 +90,7 @@ import { NoveltyComponent } from './jsViews/novelty/novelty/novelty.component';
 import { ConfirmPasswordComponent } from './jsViews/confirmPassword/confirm-password/confirm-password.component';
 import { SecondFactorAuthenticationComponent } from './jsViews/secondFactorAuthentication/second-factor-authentication/second-factor-authentication.component';
 import { EnterpriseComponent } from './jsViews/domain/enterprise/enterprise/enterprise.component';
-import { MarketComponent } from './jsViews/domain/market/market/market.component';
 import { PortadaModule } from './jsViews/portada/portada/portada-module/portada.module';
-import { OrderModule } from './jsViews/domain/order/order.module';
 import { LegalInformationModule } from './jsViews/domain/legal-information/legal-information.module';
 
 
@@ -124,7 +122,6 @@ import { LegalInformationModule } from './jsViews/domain/legal-information/legal
     NgxSpinnerModule,
     NgSelectModule,
     PortadaModule,
-    OrderModule,
     LegalInformationModule,
 
   ],
@@ -148,7 +145,6 @@ import { LegalInformationModule } from './jsViews/domain/legal-information/legal
     ConfirmPasswordComponent,
     SecondFactorAuthenticationComponent,
     EnterpriseComponent,
-    MarketComponent,
 
   ],
   providers: [

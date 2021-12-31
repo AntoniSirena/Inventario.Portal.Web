@@ -22,8 +22,6 @@ import { NoveltyComponent } from './jsViews/novelty/novelty/novelty.component';
 import { ConfirmPasswordComponent } from './jsViews/confirmPassword/confirm-password/confirm-password.component';
 import { SecondFactorAuthenticationComponent } from './jsViews/secondFactorAuthentication/second-factor-authentication/second-factor-authentication.component';
 import { EnterpriseComponent } from './jsViews/domain/enterprise/enterprise/enterprise.component';
-import { MarketComponent } from './jsViews/domain/market/market/market.component';
-import { ViewMarketComponent } from './jsViews/domain/viewMarket/view-market/view-market.component';
 
 
 export const routes: Routes = [
@@ -128,10 +126,6 @@ export const routes: Routes = [
         loadChildren: () => import('./jsViews/portada/portada/portada-module/portada.module').then(m => m.PortadaModule)
       },
       {
-        path: 'order',
-        loadChildren: () => import('./jsViews/domain/order/order.module').then(m => m.OrderModule)
-      },
-      {
         path: 'legalInfo',
         loadChildren: () => import('./jsViews/domain/legal-information/legal-information.module').then(m => m.LegalInformationModule)
       },
@@ -218,24 +212,6 @@ export const routes: Routes = [
         component: EnterpriseComponent,
         data: {
           title: 'Empresas'
-        }
-      },
-
-      {
-        path: 'market',
-        canActivate: [AuthGuard],
-        component: MarketComponent,
-        data: {
-          title: 'Realizas tus operaciones de mercado gratis'
-        }
-      },
-
-      {
-        path: 'viewMarket',
-        canActivate: [AuthGuard],
-        component: ViewMarketComponent,
-        data: {
-          title: 'Realizas tus operaciones de mercado gratis'
         }
       },
 

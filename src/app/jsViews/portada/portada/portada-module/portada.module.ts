@@ -15,13 +15,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { PortadaComponent } from '../portada.component';
 import { PortadaRoutingModule } from '../portada-routing';
-import { ViewMarketComponent } from '../../../domain/viewMarket/view-market/view-market.component';
 
 
 @NgModule({
   declarations: [
     PortadaComponent,
-    ViewMarketComponent,
   ],
   imports: [
     CommonModule,
