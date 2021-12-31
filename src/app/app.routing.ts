@@ -21,7 +21,6 @@ import { MyFilesComponent } from './jsViews/myFiles/my-files/my-files.component'
 import { NoveltyComponent } from './jsViews/novelty/novelty/novelty.component';
 import { ConfirmPasswordComponent } from './jsViews/confirmPassword/confirm-password/confirm-password.component';
 import { SecondFactorAuthenticationComponent } from './jsViews/secondFactorAuthentication/second-factor-authentication/second-factor-authentication.component';
-import { CompanyRegisterComponent } from './jsViews/domain/companyRegister/company-register/company-register.component';
 import { EnterpriseComponent } from './jsViews/domain/enterprise/enterprise/enterprise.component';
 import { AppointmentComponent } from './jsViews/domain/appointment/appointment/appointment.component';
 import { ScheduleAppointmentComponent } from './jsViews/domain/scheduleAppointment/schedule-appointment/schedule-appointment.component';
@@ -182,14 +181,6 @@ export const routes: Routes = [
       },
 
       //domain
-      {
-        path: 'company-register',
-        canActivate: [AuthGuard],
-        component: CompanyRegisterComponent,
-        data: {
-          title: 'Mantenimiento de registro de negocios'
-        }
-      },
 
       //End domain
      
