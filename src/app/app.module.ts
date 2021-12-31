@@ -90,10 +90,6 @@ import { NoveltyComponent } from './jsViews/novelty/novelty/novelty.component';
 import { ConfirmPasswordComponent } from './jsViews/confirmPassword/confirm-password/confirm-password.component';
 import { SecondFactorAuthenticationComponent } from './jsViews/secondFactorAuthentication/second-factor-authentication/second-factor-authentication.component';
 import { EnterpriseComponent } from './jsViews/domain/enterprise/enterprise/enterprise.component';
-import { AppointmentComponent } from './jsViews/domain/appointment/appointment/appointment.component';
-import { ScheduleAppointmentComponent } from './jsViews/domain/scheduleAppointment/schedule-appointment/schedule-appointment.component';
-import { CheckAppointmentComponent } from './jsViews/domain/checkAppointment/check-appointment/check-appointment.component';
-import { QueueAppointmentComponent } from './jsViews/domain/queueAppointment/queue-appointment/queue-appointment.component';
 import { MarketComponent } from './jsViews/domain/market/market/market.component';
 import { PortadaModule } from './jsViews/portada/portada/portada-module/portada.module';
 import { OrderModule } from './jsViews/domain/order/order.module';
@@ -152,10 +148,6 @@ import { LegalInformationModule } from './jsViews/domain/legal-information/legal
     ConfirmPasswordComponent,
     SecondFactorAuthenticationComponent,
     EnterpriseComponent,
-    AppointmentComponent,
-    ScheduleAppointmentComponent,
-    CheckAppointmentComponent,
-    QueueAppointmentComponent,
     MarketComponent,
 
   ],

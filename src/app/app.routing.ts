@@ -22,10 +22,6 @@ import { NoveltyComponent } from './jsViews/novelty/novelty/novelty.component';
 import { ConfirmPasswordComponent } from './jsViews/confirmPassword/confirm-password/confirm-password.component';
 import { SecondFactorAuthenticationComponent } from './jsViews/secondFactorAuthentication/second-factor-authentication/second-factor-authentication.component';
 import { EnterpriseComponent } from './jsViews/domain/enterprise/enterprise/enterprise.component';
-import { AppointmentComponent } from './jsViews/domain/appointment/appointment/appointment.component';
-import { ScheduleAppointmentComponent } from './jsViews/domain/scheduleAppointment/schedule-appointment/schedule-appointment.component';
-import { CheckAppointmentComponent } from './jsViews/domain/checkAppointment/check-appointment/check-appointment.component';
-import { QueueAppointmentComponent } from './jsViews/domain/queueAppointment/queue-appointment/queue-appointment.component';
 import { MarketComponent } from './jsViews/domain/market/market/market.component';
 import { ViewMarketComponent } from './jsViews/domain/viewMarket/view-market/view-market.component';
 
@@ -222,41 +218,6 @@ export const routes: Routes = [
         component: EnterpriseComponent,
         data: {
           title: 'Empresas'
-        }
-      },
-      {
-        path: 'appointment',
-        canActivate: [AuthGuard],
-        component: AppointmentComponent,
-        data: {
-          title: 'Inicia tu fila desde ya'
-        }
-      },
-
-      {
-        path: 'scheduleAppointment',
-        canActivate: [AuthGuard],
-        component: ScheduleAppointmentComponent,
-        data: {
-          title: 'Elige el día que deseas ser atendido'
-        }
-      },
-
-      {
-        path: 'checkAppointment',
-        canActivate: [AuthGuard],
-        component: CheckAppointmentComponent,
-        data: {
-          title: 'Consulta tu turno ó cita'
-        }
-      },
-
-      {
-        path: 'queueAppointment',
-        canActivate: [AuthGuard],
-        component: QueueAppointmentComponent,
-        data: {
-          title: 'Cola de turnos y citas'
         }
       },
 
