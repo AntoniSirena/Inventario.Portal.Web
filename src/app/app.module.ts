@@ -92,6 +92,7 @@ import { SecondFactorAuthenticationComponent } from './jsViews/secondFactorAuthe
 import { EnterpriseComponent } from './jsViews/domain/enterprise/enterprise/enterprise.component';
 import { PortadaModule } from './jsViews/portada/portada/portada-module/portada.module';
 import { LegalInformationModule } from './jsViews/domain/legal-information/legal-information.module';
+import { ProductModule } from './jsViews/domain/productModule/product.module';
 
 
 
@@ -123,6 +124,7 @@ import { LegalInformationModule } from './jsViews/domain/legal-information/legal
     NgSelectModule,
     PortadaModule,
     LegalInformationModule,
+    ProductModule,
 
   ],
   declarations: [
