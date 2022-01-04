@@ -274,10 +274,7 @@ export class RedirectService {
   welcomeToSystem() {
     this.modalService.dismissAll();
     this.router.navigate(['portada']).then(() => {
-      if(this.unauthorized){
-        setTimeout(function () { window.location.reload() }, 2000);
-        this.unauthorized = false;
-      }
+
     });
   }
 

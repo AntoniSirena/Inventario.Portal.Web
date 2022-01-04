@@ -76,37 +76,11 @@ export class PortadaComponent implements OnInit {
 
   ngOnInit(): void {
 
-    if (localStorage.length <= 5) {
-      this.redirectService.loginUserVisitador();
-      return;
-    }
-
     this.currentOperationPosition = JSON.parse(localStorage.getItem('currentOperationPosition'));
     if(this.currentOperationPosition === null){
       localStorage.setItem('currentOperationPosition', `${JSON.stringify(0)}`)
     }
 
-    this.loadingPortada();
-    this.openDefaultMenu();
-
-    //AutomaticPublicity
-    this.isEnabledAutomaticPublicity('IsEnabled_AutomaticPublicity');
-
-  }
-
-
-  //open default menu
-  openDefaultMenu() {
-    $('#btnMenu').trigger('click');
-  }
-
-  ///loading
-  loadingPortada() {
-
-    setTimeout(() => {
-      this.spinnerService.hide();
-
-    }, 5000);
   }
 
 

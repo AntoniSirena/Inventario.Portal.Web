@@ -27,7 +27,7 @@ import { EnterpriseComponent } from './jsViews/domain/enterprise/enterprise/ente
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'portada',
+    redirectTo: 'login',
     pathMatch: 'full',
   },
   {
@@ -69,6 +69,7 @@ export const routes: Routes = [
   },
   {
     path: 'register',
+    canActivate: [AuthGuard],
     component: RegisterComponent,
     data: {
       title: 'Register Page'
@@ -123,6 +124,7 @@ export const routes: Routes = [
       },
       {
         path: 'portada',
+        canActivate: [AuthGuard],
         loadChildren: () => import('./jsViews/portada/portada/portada-module/portada.module').then(m => m.PortadaModule)
       },
       {

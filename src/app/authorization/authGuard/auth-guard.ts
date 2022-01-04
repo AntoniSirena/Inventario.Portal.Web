@@ -14,49 +14,13 @@ export class AuthGuard implements CanActivate {
     }
 
     canActivate() {
-        if (this.isVisitorUser) {
-            if (this.validateHashVisitador()) {
-                if (localStorage.length > 0) {
-                    return true;
-                }
-            }
-        } else {
-            if (localStorage.length > 0) {
-                return true;
-            }
-        }
-
-        this.redirectService.login(true);
-    }
-
-    readyToRequest() {
-        this.listenService.readyToRequest().subscribe((response: any) => {
-        },
-            error => {
-                console.log(JSON.stringify(error));
-            });
-    }
-
-
-    validateHashVisitador() {
         let currentHash = window.location.hash;
-        let result: Boolean = false;
 
-        if (currentHash == '#/login' ||
-            currentHash == '#/register' ||
-            currentHash == '#/portada' ||
-            currentHash == '#/market' ||
-            currentHash == '#/company-register' ||
-            currentHash == '#/appointment' ||
-            currentHash == '#/scheduleAppointment' ||
-            currentHash == '#/checkAppointment' ||
-            currentHash == '#/checkAppointment' ||
-            currentHash == '#/my-files') {
-            result = true;
+        if (localStorage.length > 0) {
+            return true;
+        }else{
+            return false;
         }
-
-        return result;
     }
-
 
 }
