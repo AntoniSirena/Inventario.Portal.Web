@@ -1,1 +1,173 @@
-<p>product works!</p>
+
+<br>
+<br>
+
+<div>
+
+    <h3>Mantenimiento de Productos</h3>
+    <br>
+  
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-lg-12">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Buscar" [(ngModel)]="searchText"
+            [ngModelOptions]="{standalone: true}">
+        </div>
+      </div>
+    </div>
+  
+    <div class="table-responsive">
+      <table class="table table-hover table-bordered table-condensed">
+        <thead>
+          <tr class="tabl_eHeader_Color">
+            <th>Código interno</th>
+            <th>Código externo</th>
+            <th>Código de barra</th>
+            <th>Descripción</th>
+            <th>Costo</th>
+            <th>Precio</th>
+            <th class="right" *ngIf="canDelete"></th>
+            <th class="right" *ngIf="canCreate"><button type="button" class="btn btn-success"
+                (click)="openCreateModal()"><i class="fa fa-plus"></i>&nbsp;Nuevo</button></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let item of products | filter : searchText | paginate: { itemsPerPage: 12, currentPage: _currentPage}">
+            <td>{{item.Id}}</td>
+            <td>{{item.ExternalCode}}</td>
+            <td>{{item.BarCode}}</td>
+            <td>{{item.Description}}</td>
+            <td>{{item.Cost | currency}}</td>
+            <td>{{item.Price | currency}}</td>
+            <td class="right" *ngIf="canDelete"> <button type="button" class="btn btn-danger" (click)="delete(item.Id)"><i
+                  class="fa fa-remove"></i>&nbsp;Eliminar</button> </td>
+            <td class="right" *ngIf="canEdit"><button type="button" class="btn btn-primary"
+                (click)="openEditModal(item.Id)"><i class="fa fa-pencil"></i>&nbsp;Editar</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <pagination-controls (pageChange)="_currentPage = $event" autoHide="true" responsive="true" previousLabel="Anterior"
+        nextLabel="Siguiente">
+      </pagination-controls>
+    </div>
+  
+</div>
+
+
+
+<!--Create modal-->
+<ng-template #createModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Nuevo producto</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+  
+      <form [formGroup]="createForm" (submit)="create(createForm.value)">
+
+        <label for="Descripción" class="bold">Descripción</label>
+        <div class="input-group mb-3">
+            <input type="text" formControlName="description" class="form-control">
+            <div *ngIf="!createForm.value.description" class="required">*</div>
+        </div>
+
+        <label for="externalCode" class="bold">Código externo</label>
+        <div class="input-group mb-3">
+            <input type="text" formControlName="externalCode" class="form-control">
+            <div *ngIf="!createForm.value.externalCode" class="required">*</div>
+        </div>
+
+        <label for="barCode" class="bold">Código de barra</label>
+        <div class="input-group mb-3">
+            <input type="text" formControlName="barCode" class="form-control">
+        </div>
+
+        <label for="cost" class="bold">Costo</label>
+        <div class="input-group mb-3">
+            <input type="number" formControlName="cost" class="form-control">
+            <div *ngIf="!createForm.value.cost" class="required">*</div>
+        </div>
+
+        <label for="price" class="bold">Precio</label>
+        <div class="input-group mb-3">
+            <input type="number" formControlName="price" class="form-control">
+            <div *ngIf="!createForm.value.price" class="required">*</div>
+        </div>
+
+        <br>
+        <div class="row">
+            <div class="col-sm-12">
+              <button type="submit" class="btn btn-primary btn-large btn-block bold"
+              style="font-size: 18px;"
+              [disabled]="createForm.invalid">Guardar</button>
+            </div>
+        </div>
+        <br>
+
+      </form>
+  
+    </div>
+
+</ng-template>
+
+
+<!--Edit modal-->
+<ng-template #editModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">{{productModel.Description}}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+  
+      <form [formGroup]="editForm" (submit)="edit(editForm.value)">
+
+        <label for="Descripción" class="bold">Descripción</label>
+        <div class="input-group mb-3">
+            <input type="text" formControlName="description" class="form-control">
+            <div *ngIf="!editForm.value.description" class="required">*</div>
+        </div>
+
+        <label for="externalCode" class="bold">Código externo</label>
+        <div class="input-group mb-3">
+            <input type="text" formControlName="externalCode" class="form-control">
+            <div *ngIf="!editForm.value.externalCode" class="required">*</div>
+        </div>
+
+        <label for="barCode" class="bold">Código de barra</label>
+        <div class="input-group mb-3">
+            <input type="text" formControlName="barCode" class="form-control">
+        </div>
+
+        <label for="cost" class="bold">Costo</label>
+        <div class="input-group mb-3">
+            <input type="number" formControlName="cost" class="form-control">
+            <div *ngIf="!editForm.value.cost" class="required">*</div>
+        </div>
+
+        <label for="price" class="bold">Precio</label>
+        <div class="input-group mb-3">
+            <input type="number" formControlName="price" class="form-control">
+            <div *ngIf="!editForm.value.price" class="required">*</div>
+        </div>
+
+        <br>
+        <div class="row">
+            <div class="col-sm-12">
+              <button type="submit" class="btn btn-primary btn-large btn-block bold"
+              style="font-size: 18px;"
+              [disabled]="editForm.invalid">Guardar</button>
+            </div>
+        </div>
+        <br>
+
+      </form>
+  
+    </div>
+
+</ng-template>
+  
