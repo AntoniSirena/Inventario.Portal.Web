@@ -10,6 +10,9 @@ import { NgxPaginationModule } from 'ngx-pagination';
 //ng-Search
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 
+//spinner
+import { NgxSpinnerModule } from "ngx-spinner"
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
@@ -26,7 +29,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     Ng2SearchPipeModule,
     FormsModule,
     ReactiveFormsModule,
-    
+    NgxSpinnerModule,
   ]
 })
 export class ProductModule { }

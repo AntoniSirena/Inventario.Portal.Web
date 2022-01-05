@@ -6,6 +6,8 @@ import { Product, ProductModel } from '../../../../models/domain/product';
 import { ProductService } from '../../../../services/domain/product/product.service';
 import Swal from 'sweetalert2';
 import { Iresponse } from '../../../../interfaces/Iresponse/iresponse';
+import * as XLSX from 'ts-xlsx';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 @Component({
@@ -18,12 +20,18 @@ export class ProductComponent implements OnInit {
 
   @ViewChild('createModal') createModal: ElementRef;
   @ViewChild('editModal') editModal: ElementRef;
+  @ViewChild('excelProductModal') excelProductModal: ElementRef;
+
 
 
   createForm: FormGroup;
   editForm: FormGroup;
 
   _currentPage: number = 1;
+
+  arrayBuffer: any;
+  file: File;
+  excelProducts: any;
 
   //Permissions
   canCreate: boolean = true;
@@ -38,12 +46,50 @@ export class ProductComponent implements OnInit {
     private productService: ProductService,
     private modalService: NgbModal,
     private form: FormBuilder,
+    private spinnerService: NgxSpinnerService,
   ) { }
 
 
   ngOnInit(): void {
     this.getAll();
   }
+
+
+  //Import excel file
+  incomingfile(event) {
+    this.file = event.target.files[0];
+  }
+
+  uploadExcel() {
+
+    if(!this.file){
+      Swal.fire({
+        icon: 'warning',
+        title: 'Favor seleccione el listado de productos para continuar',
+        showConfirmButton: true,
+        timer: 5000
+      });
+      return;
+    }
+
+    let fileReader = new FileReader();
+    fileReader.onload = (e) => {
+      this.arrayBuffer = fileReader.result;
+      var data = new Uint8Array(this.arrayBuffer);
+      var arr = new Array();
+      for (var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
+      var bstr = arr.join("");
+      var workbook = XLSX.read(bstr, { type: "binary" });
+      var first_sheet_name = workbook.SheetNames[0];
+      var worksheet = workbook.Sheets[first_sheet_name];
+      this.excelProducts = XLSX.utils.sheet_to_json(worksheet, { raw: true });
+    }
+    fileReader.readAsArrayBuffer(this.file);
+
+    this.modalService.open(this.excelProductModal, { size: 'xl', backdrop: 'static', scrollable: true });
+
+  }
+
 
 
   getAll() {
@@ -91,6 +137,55 @@ export class ProductComponent implements OnInit {
     this.getById(id);
   }
 
+
+  //Upload products
+  uploadProducts() {
+
+    Swal.fire({
+      title: 'Esta seguro que desea guardar los producto ?',
+      text: "Los cambios podran ser revertidos!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, guardar!'
+    }).then((result) => {
+      if (result.value) {
+
+        this.spinnerService.show();
+    
+        this.productService.uploadProducts(this.excelProducts).subscribe((response: Iresponse) => {
+          this.spinnerService.hide();
+    
+          if (response.Code === '000') {
+            Swal.fire({
+              position: 'top-end',
+              icon: 'success',
+              title: response.Message,
+              showConfirmButton: true,
+              timer: 2000
+            }).then(() => {
+              this.getAll();
+              this.modalService.dismissAll();
+            });
+          } else {
+            Swal.fire({
+              icon: 'warning',
+              title: response.Message,
+              showConfirmButton: true,
+              timer: 5000
+            });
+          }
+        },
+          error => {
+            this.spinnerService.hide();
+            console.log(JSON.stringify(error));
+          });
+
+      }
+    })
+
+  }
 
 
   //create

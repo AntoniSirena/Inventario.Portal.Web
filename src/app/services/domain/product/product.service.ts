@@ -24,18 +24,23 @@ export class ProductService {
     return this.httpClient.get(this.coreURL + `api/product/GetById?Id=${id}`);
   }
   
+  uploadProducts(request: any) {
+    let data = JSON.stringify(request);
+    return this.httpClient.post(`${this.coreURL}api/product/UploadProducts`, data, { headers: this.headers });
+  }
+
   create(request: Iproduct) {
     let data = JSON.stringify(request);
-    return this.httpClient.post(`${this.coreURL}api/product/create`, data, { headers: this.headers });
+    return this.httpClient.post(`${this.coreURL}api/product/Create`, data, { headers: this.headers });
   }
 
   update(request: Iproduct) {
     let data = JSON.stringify(request);
-    return this.httpClient.put(`${this.coreURL}api/product/update`, data, { headers: this.headers });
+    return this.httpClient.put(`${this.coreURL}api/product/Update`, data, { headers: this.headers });
   }
 
   delete(id: number): Observable<object> {
-    return this.httpClient.delete(this.coreURL + `api/product/delete?id=${id}`);
+    return this.httpClient.delete(this.coreURL + `api/product/Delete?id=${id}`);
   }
   
 }
