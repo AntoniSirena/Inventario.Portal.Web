@@ -133,7 +133,7 @@ export class RedirectService {
         }).then(() => {
           this.modalService.dismissAll();
           this.unauthorized = true;
-          this.loginUserVisitador();
+          this.router.navigate(['login']);
         });
       }
 
@@ -173,10 +173,6 @@ export class RedirectService {
           }).then(() => {
             this.loginUserVisitador(false);
           });
-        }
-
-        if (userName === Users.Visitor) {
-          this.loginUserVisitador();
         }
 
       }
@@ -244,31 +240,15 @@ export class RedirectService {
 
   NoAuthorizedRequest() {
 
-    if (localStorage.length > 0) {
-      let userName = JSON.parse(localStorage.getItem('userName'));
-      let isVisitorUser = JSON.parse(localStorage.getItem('isVisitorUser'));
+    let userName = JSON.parse(localStorage.getItem('userName'));
 
-      this.loginSevice.logOut(userName).subscribe((response: any) => {
-      },
-        error => {
-          console.log(JSON.stringify(error));
-        });
+    this.loginSevice.logOut(userName).subscribe((response: any) => {
+    },
+      error => {
+        console.log(JSON.stringify(error));
+      });
 
-      if (!isVisitorUser) {
-        if (!window.location.hash.match('login') && !window.location.hash.match('portada')) {
-          Swal.fire({
-            icon: 'warning',
-            title: 'Estimado usuario la solicitud no fué autorizada',
-            showConfirmButton: false,
-            timer: 4000
-          }).then(() => {
-            this.router.navigate(['login']);
-          });
-        }
-      } else {
-        this.router.navigate(['login']);
-      }
-    }
+    this.router.navigate(['login']);
   }
 
   welcomeToSystem() {
