@@ -1,0 +1,170 @@
+
+<!--Call spinner-->
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="rgb(152, 214, 218)" type="timer">
+    <p style="font-size: 20px; color: white">Guardando productos...</p>
+</ngx-spinner>
+
+<br>
+
+
+
+<div>
+
+    <h3>Inventarios a la fecha</h3>
+    <br>
+  
+    <div class="row" *ngIf="canCreate">
+        <div class="col-md-2">
+            <button type="button" class="btn btn-primary btn-large btn-block bold"
+            style="font-size: 17px; margin-top: 10px;" (click)="openCreateModal()" >Aperturar inventario</button>
+        </div>
+    </div>
+    <br>
+
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-lg-12">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Buscar" [(ngModel)]="searchText"
+            [ngModelOptions]="{standalone: true}">
+        </div>
+      </div>
+    </div>
+  
+    <div class="table-responsive">
+      <table class="table table-hover table-bordered table-condensed">
+        <thead>
+          <tr class="tabl_eHeader_Color">
+            <th>Código</th>
+            <th>Descripción</th>
+            <th>Estado</th>
+            <th>Fecha de apertura</th>
+            <th>Fecha de cierre</th>
+            <th>Usuario</th>
+            <th class="right" *ngIf="canDelete"></th>
+            <th class="right" *ngIf="canEdit"></th>
+            <th class="right" *ngIf="canCountItem"></th>
+            <th class="right" *ngIf="canClosed"></th>
+            <th class="right" *ngIf="exportExcel"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let item of inventories | filter : searchText | paginate: { itemsPerPage: 10, currentPage: _currentPage}">
+            <td>{{item.Id}}</td>
+            <td>{{item.Description}}</td>
+            <td class="td_min"> <span class="{{item.StatusColour}} center bold">{{item.Status}}</span> </td>
+            <td>{{item.OpenDate}}</td>
+            <td>{{item.ClosedDate}}</td>
+            <td>{{item.UserName}}</td>
+            <td class="right" *ngIf="canDelete"> <button type="button" [disabled]="item.StatuShortName !== 'Open' " class="btn btn-danger bold" (click)="delete(item.Id)"><i
+                  class="fa fa-remove"></i>&nbsp;Eliminar</button> </td>
+
+            <td class="right" *ngIf="canEdit"><button type="button" class="btn btn-primary bold"
+                [disabled]="item.StatuShortName !== 'Open' " (click)="openEditModal(item.Id)"><i class="fa fa-pencil"></i>&nbsp;Editar</button></td>
+            
+                <td class="right" *ngIf="canClosed"> <button type="button" [disabled]="item.StatuShortName !== 'Open' " class="btn btn-warning bold" style="color: white;" (click)="closedInventory(item.Id)">Cerrar inventario</button> </td>
+
+                <td class="right" *ngIf="canCountItem"> <button type="button" [disabled]="item.StatuShortName !== 'Open' " class="btn btn-success bold" (click)="openModalCountItem(item)">Contar items</button> </td>
+
+                <td class="right" *ngIf="exportExcel"> <button type="button" class="btn btn-primary bold" (click)="exportToExcel(item.Id)">Exportar a excel</button> </td>
+
+            </tr>
+        </tbody>
+      </table>
+      <pagination-controls (pageChange)="_currentPage = $event" autoHide="true" responsive="true" previousLabel="Anterior"
+        nextLabel="Siguiente">
+      </pagination-controls>
+    </div>
+  
+</div>
+
+
+
+<!--Create modal-->
+<ng-template #createModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Nuevo inventario</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+  
+      <form [formGroup]="createForm" (submit)="create(createForm.value)">
+
+        <label for="Descripción" class="bold">Descripción</label>
+        <div class="input-group mb-3">
+            <input type="text" formControlName="description" class="form-control">
+            <div *ngIf="!createForm.value.description" class="required">*</div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+              <button type="submit" class="btn btn-primary btn-large btn-block bold"
+              style="font-size: 18px;"
+              [disabled]="createForm.invalid">Guardar</button>
+            </div>
+        </div>
+
+      </form>
+  
+    </div>
+
+</ng-template>
+
+
+<!--Edit modal-->
+<ng-template #editModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">{{inventory.Description}}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+  
+      <form [formGroup]="editForm" (submit)="edit(editForm.value)">
+
+        <label for="Descripción" class="bold">Descripción</label>
+        <div class="input-group mb-3">
+            <input type="text" formControlName="description" class="form-control">
+            <div *ngIf="!editForm.value.description" class="required">*</div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+              <button type="submit" class="btn btn-primary btn-large btn-block bold"
+              style="font-size: 18px;"
+              [disabled]="editForm.invalid">Guardar</button>
+            </div>
+        </div>
+
+      </form>
+  
+    </div>
+
+</ng-template>
+
+
+
+<!--Edit count item-->
+<ng-template #countItemModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Conteo físico de mercancías</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-lg-12">
+          <div class="form-group">
+            <input type="text" id="searchItem" class="form-control bold" autofocus placeholder="Ingrese el parámetro de busqueda">
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+</ng-template>

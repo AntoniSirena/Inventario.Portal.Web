@@ -137,7 +137,11 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
         loadChildren: () => import('./jsViews/domain/productModule/product.module').then(m => m.ProductModule)
       },
-
+      {
+        path: 'inventory',
+        canActivate: [AuthGuard],
+        loadChildren: () => import('./jsViews/domain/inventoryModule/inventory.module').then(m => m.InventoryModule)
+      },
 
       {
         path: 'user',

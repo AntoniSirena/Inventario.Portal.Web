@@ -93,6 +93,7 @@ import { EnterpriseComponent } from './jsViews/domain/enterprise/enterprise/ente
 import { PortadaModule } from './jsViews/portada/portada/portada-module/portada.module';
 import { LegalInformationModule } from './jsViews/domain/legal-information/legal-information.module';
 import { ProductModule } from './jsViews/domain/productModule/product.module';
+import { InventoryModule } from './jsViews/domain/inventoryModule/inventory.module';
 
 
 
@@ -125,6 +126,7 @@ import { ProductModule } from './jsViews/domain/productModule/product.module';
     PortadaModule,
     LegalInformationModule,
     ProductModule,
+    InventoryModule,
 
   ],
   declarations: [
