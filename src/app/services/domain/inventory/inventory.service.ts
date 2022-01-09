@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Iinventory } from '../../../interfaces/domain/iInventory';
+import { Product } from './../../../models/domain/product';
 
 @Injectable({
   providedIn: 'root'
@@ -25,8 +26,22 @@ export class InventoryService {
     return this.httpClient.get(this.coreURL + `api/inventory/GetById?Id=${id}`);
   }
 
+  getItems(input: string): Observable<object> {
+    return this.httpClient.get(this.coreURL + `api/inventory/GetItems?input=${input}`);
+  }
+
+  getInventoryDetails(inventoryId: number): Observable<object> {
+    return this.httpClient.get(this.coreURL + `api/inventory/GetInventoryDetails?inventoryId=${inventoryId}`);
+  }
+
+
   closedInventory(id: number): Observable<object> {
     return this.httpClient.get(this.coreURL + `api/inventory/ClosedInventory?id=${id}`);
+  }
+
+  saveItem(request: Product) {
+    let data = JSON.stringify(request);
+    return this.httpClient.post(`${this.coreURL}api/inventory/SaveItem`, data, { headers: this.headers });
   }
 
   create(request: Iinventory) {

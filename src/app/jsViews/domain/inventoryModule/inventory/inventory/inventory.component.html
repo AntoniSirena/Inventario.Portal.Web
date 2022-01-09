@@ -49,7 +49,7 @@
         </thead>
         <tbody>
           <tr
-            *ngFor="let item of inventories | filter : searchText | paginate: { itemsPerPage: 10, currentPage: _currentPage}">
+            *ngFor="let item of inventories | filter : searchText | paginate: { itemsPerPage: 10, currentPage: p1, id: 'page1'}">
             <td>{{item.Id}}</td>
             <td>{{item.Description}}</td>
             <td class="td_min"> <span class="{{item.StatusColour}} center bold">{{item.Status}}</span> </td>
@@ -71,7 +71,7 @@
             </tr>
         </tbody>
       </table>
-      <pagination-controls (pageChange)="_currentPage = $event" autoHide="true" responsive="true" previousLabel="Anterior"
+      <pagination-controls (pageChange)="p1 = $event" id='page1' autoHide="true" responsive="true" previousLabel="Anterior"
         nextLabel="Siguiente">
       </pagination-controls>
     </div>
@@ -156,15 +156,171 @@
       </button>
     </div>
     <div class="modal-body">
-
+      
       <div class="row">
         <div class="col-xs-12 col-sm-12 col-lg-12">
           <div class="form-group">
-            <input type="text" id="searchItem" class="form-control bold" autofocus placeholder="Ingrese el parámetro de busqueda">
+            <label class="bold">Buscar items</label>
+            <input type="text" [(ngModel)]="searchItem" #_searchItem class="form-control bold" 
+            (ngModelChange)="getItemsByTime(searchItem)" placeholder="Ingrese el parámetro de busqueda">
+            
           </div>
         </div>
       </div>
 
+      <br>
+
+      <div class="row">
+        <div class="col-sm-2">
+          <button type="button" class="btn btn-primary btn-large btn-block bold"
+          style="font-size: 18px;" (click)="getInventoryDetails()">Refrescar items</button>
+        </div>
+      </div>
+
+      <br>
+
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-lg-12">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Buscar" [(ngModel)]="searchText"
+              [ngModelOptions]="{standalone: true}">
+          </div>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover table-bordered table-condensed">
+          <thead>
+            <tr class="tabl_eHeader_Color">
+              <th>Código externo</th>
+              <th>Código de barra</th>
+              <th>Descripción</th>
+              <th>Costo anterior</th>
+              <th>Precio anterior</th>
+              <th>Costo actual</th>
+              <th>Precio actual</th>
+              <th>Cantidad</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let item of inventoryDetails | filter : searchText | paginate: { itemsPerPage: 10, currentPage: p2, id: 'page2'}">
+              <td>{{item.ExternalCode}}</td>
+              <td>{{item.BarCode}}</td>
+              <td>{{item.Description}}</td>
+              <td>{{item.OldCost}}</td>
+              <td>{{item.OldPrice}}</td>
+              <td>{{item.Cost}}</td>
+              <td>{{item.Price}}</td>
+              <td>{{item.Quantity}}</td>
+
+              </tr>
+          </tbody>
+        </table>
+        <pagination-controls (pageChange)="p2 = $event" id='page2' autoHide="true" responsive="true" previousLabel="Anterior"
+          nextLabel="Siguiente">
+        </pagination-controls>
+      </div>
+
     </div>
+
+</ng-template>
+
+
+
+<!--Show item-->
+<ng-template #showItemModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Item encontrado</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+    <div *ngFor="let item of items">
+
+      <span class="bold">{{item.Description}}</span>
+      
+      <form [formGroup]="countItemForm" (submit)="saveItem(countItemForm.value)">
+
+        <br>
+
+        <label for="cost" class="bold">Costo</label>
+        <div class="input-group mb-3">
+            <input type="number" formControlName="cost" class="form-control">
+            <div *ngIf="!countItemForm.value.cost" class="required">*</div>
+        </div>
+
+        <label for="price" class="bold">Precio</label>
+        <div class="input-group mb-3">
+            <input type="number" formControlName="price" class="form-control">
+            <div *ngIf="!countItemForm.value.price" class="required">*</div>
+        </div>
+
+        <label for="quantity" class="bold">Cantidad</label>
+        <div class="input-group mb-3">
+            <input type="number" formControlName="quantity" class="form-control">
+            <div *ngIf="!countItemForm.value.quantity" class="required">*</div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-2">
+              <button id="saveItem" type="submit" class="btn btn-primary btn-large btn-block bold"
+              style="font-size: 18px;"
+              [disabled]="countItemForm.invalid">Guardar</button>
+            </div>
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+
+</ng-template>
+
+
+<!--Show items-->
+<ng-template #showItemsModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Items encontrados {{items.length}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+
+    <div class="table-responsive">
+      <table class="table table-hover table-bordered table-condensed">
+        <thead>
+          <tr class="tabl_eHeader_Color">
+            <th>Descripción</th>
+            <th>Código externo</th>
+            <th>Código de barra</th>
+            <th>Costo</th>
+            <th>Precio</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let item of items | filter : searchText | paginate: { itemsPerPage: 50, currentPage: p3, id: 'page3'}">
+            <td>{{item.Description}}</td>
+            <td>{{item.ExternalCode}}</td>
+            <td>{{item.BarCode}}</td>
+            <td>{{item.Cost}}</td>
+            <td>{{item.Price}}</td>
+            <td class="right"> <button type="button" class="btn btn-primary bold" (click)="addItemToCount(item)">Seleccionar</button> </td>
+            </tr>
+        </tbody>
+      </table>
+      <pagination-controls (pageChange)="p3 = $event" id='page3' autoHide="true" responsive="true" previousLabel="Anterior"
+        nextLabel="Siguiente">
+      </pagination-controls>
+    </div>
+
+  </div>
 
 </ng-template>

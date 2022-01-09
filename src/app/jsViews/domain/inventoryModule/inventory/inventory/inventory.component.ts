@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Inventory, InventoryModel } from '../../../../../models/domain/inventory';
 import { InventoryService } from '../../../../../services/domain/inventory/inventory.service';
@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import $ from 'jquery';
 import { Iinventory } from '../../../../../interfaces/domain/iInventory';
 import { Iresponse } from '../../../../../interfaces/Iresponse/iresponse';
+import { Product } from './../../../../../models/domain/product';
 
 
 
@@ -22,13 +23,17 @@ export class InventoryComponent implements OnInit {
   @ViewChild('createModal') createModal: ElementRef;
   @ViewChild('editModal') editModal: ElementRef;
   @ViewChild('countItemModal') countItemModal: ElementRef;
+  @ViewChild('showItemModal') showItemModal: ElementRef;
+  @ViewChild('showItemsModal') showItemsModal: ElementRef;
 
 
+  showItemsModalReference: NgbModalRef;
+  showItemModalReference: NgbModalRef;
 
   createForm: FormGroup;
   editForm: FormGroup;
+  countItemForm: FormGroup;
 
-  _currentPage: number = 1;
 
   //Permissions
   canCreate: boolean = true;
@@ -41,9 +46,14 @@ export class InventoryComponent implements OnInit {
 
   inventories = new Array<Inventory>();
   inventory = new InventoryModel();
-
   currentInventory = new Inventory();
 
+  inventoryDetails = new Array<Product>();
+
+  items = new Array<Product>();
+
+  searchItem: string;
+  timerSearchItem: any = 0;
 
 
   constructor(
@@ -86,6 +96,140 @@ export class InventoryComponent implements OnInit {
       });
   }
 
+
+  //get items
+  getItems(input: string) {
+
+    this.initCountItemFrom();
+
+    this.inventoryService.getItems(input).subscribe((response: Iresponse) => {
+      this.items = response.Data;
+      this.searchItem = '';
+
+      if (response.Code === '000') {
+
+        if (this.items.length == 1) {
+
+          //Llenando count item form
+          this.countItemForm = this.form.group({
+            cost: [this.items[0].Cost, Validators.required],
+            price: [this.items[0].Price, Validators.required],
+            quantity: ['', Validators.required],
+          });
+
+          this.showItemModalReference = this.modalService.open(this.showItemModal, { size: 'lg', backdrop: 'static', scrollable: true });
+
+        } else {
+
+          this.showItemsModalReference = this.modalService.open(this.showItemsModal, { size: 'lg', backdrop: 'static', scrollable: true });
+        }
+
+      } else {
+        Swal.fire({
+          icon: 'warning',
+          title: response.Message,
+          showConfirmButton: true,
+          timer: 2000
+        });
+      }
+
+    },
+      error => {
+        console.log(JSON.stringify(error));
+      });
+  }
+
+
+  //get items automatic
+  getItemsByTime(input: string) {
+    clearTimeout(this.timerSearchItem);
+    this.timerSearchItem = setTimeout(() => {
+      this.getItems(input);
+    }, 2000);
+  }
+
+
+  //get inventory details
+  getInventoryDetails() {
+    this.inventoryService.getInventoryDetails(this.currentInventory.Id).subscribe((response: Iresponse) => {
+      this.inventoryDetails = response.Data;
+    },
+      error => {
+        console.log(JSON.stringify(error));
+      });
+  }
+
+
+  addItemToCount(item: Product) {
+    this.showItemsModalReference.close();
+
+    this.items = new Array<Product>();
+    this.items.push(item);
+    
+    //Llenando count item form
+    this.countItemForm = this.form.group({
+      cost: [this.items[0].Cost, Validators.required],
+      price: [this.items[0].Price, Validators.required],
+      quantity: ['', Validators.required],
+    });
+
+    this.showItemModalReference = this.modalService.open(this.showItemModal, { size: 'lg', backdrop: 'static', scrollable: true });
+
+  }
+
+
+  //save item
+  saveItem(form: any) {
+
+    if (!form.quantity) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'La cantidad debe ser mayor a 0',
+        showConfirmButton: true,
+        timer: 3000
+      });
+      return;
+    }
+
+    const data: Product = {
+      Id: this.items[0].Id,
+      Description: null,
+      ExternalCode: null,
+      BarCode: null,
+      OldCost: 0,
+      OldPrice: 0,
+      Cost: form.cost,
+      Price: form.price,
+      Quantity: form.quantity,
+      InventoryId: this.currentInventory.Id,
+    };
+
+    this.inventoryService.saveItem(data).subscribe((response: Iresponse) => {
+      if (response.Code === '000') {
+        console.log(this.showItemsModalReference);
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: response.Message,
+          showConfirmButton: true,
+          timer: 2000
+        }).then(() => {
+          this.showItemModalReference.close();
+        });
+      } else {
+        Swal.fire({
+          icon: 'warning',
+          title: response.Message,
+          showConfirmButton: true,
+          timer: 4000
+        });
+      }
+    },
+      error => {
+        console.log(JSON.stringify(error));
+      });
+
+  }
 
 
   //open create modal
@@ -289,9 +433,12 @@ export class InventoryComponent implements OnInit {
 
 
   //Open modal CountItem
-  openModalCountItem(inventory: Inventory){
+  openModalCountItem(inventory: Inventory) {
+    this.searchItem = '';
     this.currentInventory = inventory;
-    this.modalService.open(this.countItemModal, { size:'xl', backdrop: 'static', scrollable: true });
+    this.getInventoryDetails();
+
+    this.modalService.open(this.countItemModal, { size: 'xl', backdrop: 'static', scrollable: true });
   }
 
 
@@ -315,5 +462,16 @@ export class InventoryComponent implements OnInit {
       description: ['', Validators.required],
     });
   }
+
+
+  //init count item from
+  initCountItemFrom() {
+    this.countItemForm = this.form.group({
+      cost: ['', Validators.required],
+      price: ['', Validators.required],
+      quantity: ['', Validators.required]
+    });
+  }
+
 
 }

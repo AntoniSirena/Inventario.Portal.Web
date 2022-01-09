@@ -5,8 +5,12 @@ export class Product {
     Description: string;
     ExternalCode: string;
     BarCode: string;
+    OldCost: number;
+    OldPrice: number;
     Cost: number;
     Price: number;
+    InventoryId: number;
+    Quantity: number;
 }
 
 export class ProductModel extends Audit {
