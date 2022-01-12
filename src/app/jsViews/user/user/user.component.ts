@@ -10,6 +10,7 @@ import { Person, Locators } from '../../../models/profile/profile';
 import { IpDiviceService } from '../../../services/ipDivice/ip-divice.service';
 import { UserType } from '../../../models/common/userType/user-type';
 import { CommonService } from './../../../services/common/common.service';
+import { BaseService } from '../../../services/base/base.service';
 
 
 @Component({
@@ -47,6 +48,7 @@ export class UserComponent implements OnInit {
     Image: '',
     Code: '',
     PhoneNumber: '',
+    CanDoInventory: false,
     LastLoginTime: '',
     LastLoginTimeEnd: '',
     IsOnline: false,
@@ -86,6 +88,9 @@ export class UserComponent implements OnInit {
   ipAddress: object;
 
 
+  _canDoInventory: boolean;
+  currentRole: string;
+
   //Permissions
   canCreate = JSON.parse(localStorage.getItem("canCreate"));
   canEdit = JSON.parse(localStorage.getItem("canEdit"));
@@ -94,6 +99,7 @@ export class UserComponent implements OnInit {
   //constructor
   constructor(
     private userService: UserService,
+    private baseService: BaseService,
     private commonService: CommonService,
     private modalService: NgbModal,
     private form: FormBuilder,
@@ -108,6 +114,8 @@ export class UserComponent implements OnInit {
     this.setValueCreateFrom();
     this.setValueEditFrom();
     this.getIPAddress();
+
+    this.currentRole = this.baseService.userData.RoleShortName;
   }
 
 
@@ -145,7 +153,8 @@ export class UserComponent implements OnInit {
 
       //llenando el modal
       this.editUserForm = this.form.group({
-        statusId: [`${this.user.StatusId}`, Validators.required]
+        statusId: [`${this.user.StatusId}`, Validators.required],
+        canDoInventory: [this.user.CanDoInventory]
       });
     },
       error => {
@@ -212,6 +221,7 @@ export class UserComponent implements OnInit {
       Image: this.user.Image,
       Code: this.user.Code,
       PhoneNumber: this.user.PhoneNumber,
+      CanDoInventory: this._canDoInventory,
       LastLoginTime: this.user.LastLoginTime,
       LastLoginTimeEnd: this.user.LastLoginTimeEnd,
       IsOnline: this.user.IsOnline,
@@ -269,6 +279,7 @@ export class UserComponent implements OnInit {
       Image: null,
       Code: null,
       PhoneNumber: formValue.phoneNumber,
+      CanDoInventory: false,
       LastLoginTime: null,
       LastLoginTimeEnd: null,
       IsOnline: false,
@@ -310,6 +321,17 @@ export class UserComponent implements OnInit {
 
   }
 
+
+  //Can do inventory
+  canDoInventory(flag: number) {
+    if (flag === 1) {
+      this._canDoInventory = true;
+    } else {
+      this._canDoInventory = false;
+    }
+  }
+
+
   //create from set value ''
   setValueCreateFrom() {
     this.createUserForm = this.form.group({
@@ -328,6 +350,7 @@ export class UserComponent implements OnInit {
   setValueEditFrom() {
     this.editUserForm = this.form.group({
       statusId: ['', Validators.required],
+      canDoInventory: [false],
     });
   }
 

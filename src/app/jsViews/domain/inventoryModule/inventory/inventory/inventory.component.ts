@@ -9,6 +9,8 @@ import $ from 'jquery';
 import { Iinventory } from '../../../../../interfaces/domain/iInventory';
 import { Iresponse } from '../../../../../interfaces/Iresponse/iresponse';
 import { Product } from './../../../../../models/domain/product';
+import { BaseService } from '../../../../../services/base/base.service';
+import { environment } from '../../../../../environments/environment';
 
 
 
@@ -34,6 +36,7 @@ export class InventoryComponent implements OnInit {
   editForm: FormGroup;
   countItemForm: FormGroup;
 
+  coreURL = environment.coreURL;
 
   //Permissions
   canCreate: boolean = true;
@@ -43,6 +46,7 @@ export class InventoryComponent implements OnInit {
   canClosed: boolean = true;
   exportExcel: boolean = true;
 
+  canDoInventory: boolean;
 
   inventories = new Array<Inventory>();
   inventory = new InventoryModel();
@@ -61,10 +65,12 @@ export class InventoryComponent implements OnInit {
     private modalService: NgbModal,
     private form: FormBuilder,
     private spinnerService: NgxSpinnerService,
+    private baseService: BaseService,
   ) { }
 
   ngOnInit(): void {
     this.getAll();
+    this.canDoInventory = this.baseService.userData.CanDoInventory;
   }
 
 
@@ -129,7 +135,7 @@ export class InventoryComponent implements OnInit {
           icon: 'warning',
           title: response.Message,
           showConfirmButton: true,
-          timer: 2000
+          timer: 3000
         });
       }
 
@@ -160,12 +166,13 @@ export class InventoryComponent implements OnInit {
   }
 
 
+  //add item to count
   addItemToCount(item: Product) {
     this.showItemsModalReference.close();
 
     this.items = new Array<Product>();
     this.items.push(item);
-    
+
     //Llenando count item form
     this.countItemForm = this.form.group({
       cost: [this.items[0].Cost, Validators.required],
@@ -177,6 +184,65 @@ export class InventoryComponent implements OnInit {
 
   }
 
+
+  //edit inventory detail
+  editInventoryDetail(item: Product) {
+    this.items = new Array<Product>();
+    this.items.push(item);
+
+    //Llenando count item form
+    this.countItemForm = this.form.group({
+      cost: [this.items[0].Cost, Validators.required],
+      price: [this.items[0].Price, Validators.required],
+      quantity: ['', Validators.required],
+    });
+
+    this.showItemModalReference = this.modalService.open(this.showItemModal, { size: 'lg', backdrop: 'static', scrollable: true });
+
+  }
+
+
+  //delete inventory detail
+  deleteInventoryDetail(id: number) {
+
+    Swal.fire({
+      title: 'Está seguro que desea eliminar el item ?',
+      text: "Los cambios no podran ser revertidos!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar!'
+    }).then((result) => {
+      if (result.value) {
+        //delete service
+        this.inventoryService.deleteInventoryDetail(id).subscribe((response: Iresponse) => {
+          if (response.Code === '000') {
+            Swal.fire({
+              position: 'top-end',
+              icon: 'success',
+              title: response.Message,
+              showConfirmButton: true,
+              timer: 2000
+            }).then(() => {
+              this.getInventoryDetails();
+            });
+          } else {
+            Swal.fire({
+              icon: 'warning',
+              title: response.Message,
+              showConfirmButton: true,
+              timer: 3000
+            });
+          }
+        },
+          error => {
+            console.log(JSON.stringify(error));
+          });
+
+      }
+    })
+  }
 
   //save item
   saveItem(form: any) {
@@ -202,11 +268,13 @@ export class InventoryComponent implements OnInit {
       Price: form.price,
       Quantity: form.quantity,
       InventoryId: this.currentInventory.Id,
+      InventoryDetailId: this.items[0].InventoryDetailId,
+      UserName: null,
     };
 
     this.inventoryService.saveItem(data).subscribe((response: Iresponse) => {
       if (response.Code === '000') {
-        console.log(this.showItemsModalReference);
+
         Swal.fire({
           position: 'top-end',
           icon: 'success',
@@ -443,8 +511,33 @@ export class InventoryComponent implements OnInit {
 
 
   //Export to excel
-  exportToExcel(id: number) {
-    alert('Funcionalidad en proceso');
+  exportToExcel(url: string, method: string, downloadName: string, data?: any) {
+    
+    var xhr = new XMLHttpRequest();
+    var _method = method || "GET";
+    xhr.open(_method, url, true);
+    xhr.responseType = 'blob';
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    xhr.onload = function (e){
+      if(this.status == 200){
+        var blob = new Blob([this.response], {type: "application/xlsx"});
+        var link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        if(downloadName){
+          link.download = downloadName;
+        }
+        link.click();
+      }
+    };
+
+    if(data){
+      var _data = typeof data == 'object'? JSON.stringify(data): data;
+      xhr.send(_data);
+    }else{
+      xhr.send();
+    }
+
   }
 
 

@@ -10,7 +10,9 @@ export class Product {
     Cost: number;
     Price: number;
     InventoryId: number;
+    InventoryDetailId: number;
     Quantity: number;
+    UserName: string;
 }
 
 export class ProductModel extends Audit {

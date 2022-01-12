@@ -39,6 +39,10 @@ export class InventoryService {
     return this.httpClient.get(this.coreURL + `api/inventory/ClosedInventory?id=${id}`);
   }
 
+  generateInventoryExcel(id: number): Observable<object> {
+    return this.httpClient.get(this.coreURL + `api/inventory/GenerateInventoryExcel?Id=${id}`);
+  }
+
   saveItem(request: Product) {
     let data = JSON.stringify(request);
     return this.httpClient.post(`${this.coreURL}api/inventory/SaveItem`, data, { headers: this.headers });
@@ -56,6 +60,10 @@ export class InventoryService {
 
   delete(id: number): Observable<object> {
     return this.httpClient.delete(this.coreURL + `api/inventory/Delete?id=${id}`);
+  }
+
+  deleteInventoryDetail(id: number): Observable<object> {
+    return this.httpClient.delete(this.coreURL + `api/inventory/DeleteInventoryDetail?id=${id}`);
   }
 
   

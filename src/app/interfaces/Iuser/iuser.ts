@@ -17,6 +17,7 @@ export interface Iuser extends Iaudit{
     DiviceIP: string;
     Code: string;
     PhoneNumber: string;
+    CanDoInventory: boolean;
 }
 
 export interface IuserStatuses{

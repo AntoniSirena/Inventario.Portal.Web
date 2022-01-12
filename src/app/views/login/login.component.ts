@@ -73,7 +73,7 @@ export class LoginComponent implements OnInit {
       password: ['', Validators.required],
     });
 
-    this.getValueRegisterButton();
+    //this.getValueRegisterButton();
     //this.getTemplateBannerA('BannerLogin_A');
     this.buttonResetPass = true;
     this.buttonLogIn = true;

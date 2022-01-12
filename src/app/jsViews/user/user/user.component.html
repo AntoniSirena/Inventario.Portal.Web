@@ -82,6 +82,21 @@
                   </select>
                   <div *ngIf="!editUserForm.value.statusId" class="required">*</div>
                 </div>
+
+                <div *ngIf="currentRole === 'Admin' || currentRole === 'SuperAdmin' ">
+
+                  <label for="canDoInventory">Puede hacer inventario ?</label>                                   
+                  <div class="input-group mb-3">
+                      <label class="switch switch-label switch-pill switch-primary">
+                          <input type="checkbox" class="switch-input" checked
+                              (change)="$event.target.checked ? canDoInventory(1) : canDoInventory(0)"
+                              formControlName="canDoInventory">
+                          <span class="switch-slider" data-checked="SI" data-unchecked="NO"></span>
+                      </label>
+                  </div>
+
+                </div>
+
               </div>
             </div>
           </div>

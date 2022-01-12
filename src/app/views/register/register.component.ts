@@ -76,6 +76,7 @@ export class RegisterComponent {
       Image: null,
       Code: formValue.code,
       PhoneNumber: formValue.phoneNumber,
+      CanDoInventory: false,
       LastLoginTime: null,
       LastLoginTimeEnd: null,
       IsOnline: false,
