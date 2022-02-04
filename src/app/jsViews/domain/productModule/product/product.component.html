@@ -1,7 +1,7 @@
 
 <!--Call spinner-->
 <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="rgb(152, 214, 218)" type="timer">
-    <p style="font-size: 20px; color: white">Guardando productos...</p>
+    <p style="font-size: 20px; color: white">{{loadingMessage}}</p>
 </ngx-spinner>
 
 <br>
@@ -11,7 +11,7 @@
     <h3>Mantenimiento de Productos</h3>
     <br>
 
-    <input type="file" style="display: inline-block;" (change)="incomingfile($event)" accept=".xlsx">
+    <input type="file" style="display: inline-block;" (change)="incomingfile($event)" accept=".xlsx,.xls">
 
     <div class="row">
         <div class="col-md-2">

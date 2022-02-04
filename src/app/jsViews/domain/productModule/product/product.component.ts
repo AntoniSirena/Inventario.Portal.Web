@@ -38,6 +38,7 @@ export class ProductComponent implements OnInit {
   canEdit: boolean = true;
   canDelete: boolean = true;
 
+  loadingMessage: string;
 
   products = new Array<Product>();
   productModel = new ProductModel;
@@ -93,10 +94,16 @@ export class ProductComponent implements OnInit {
 
 
   getAll() {
+    this.spinnerService.show();
+    this.loadingMessage = 'Cargando items';
+
     this.productService.getAll().subscribe((response: Array<Product>) => {
       this.products = response;
+
+      this.spinnerService.hide();
     },
       error => {
+        this.spinnerService.hide();
         console.log(JSON.stringify(error));
       });
   }
@@ -153,6 +160,7 @@ export class ProductComponent implements OnInit {
       if (result.value) {
 
         this.spinnerService.show();
+        this.loadingMessage = 'Guardando items';
     
         this.productService.uploadProducts(this.excelProducts).subscribe((response: Iresponse) => {
           this.spinnerService.hide();

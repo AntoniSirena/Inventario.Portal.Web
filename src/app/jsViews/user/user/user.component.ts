@@ -342,7 +342,7 @@ export class UserComponent implements OnInit {
       surName: ['', Validators.required],
       statusId: [this.userStatuses[0].Id, Validators.required],
       phoneNumber: [''],
-      userTypeId: ['', Validators.required],
+      userTypeId: [1, Validators.required],
     });
   }
 

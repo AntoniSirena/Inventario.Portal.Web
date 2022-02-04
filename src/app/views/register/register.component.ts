@@ -170,7 +170,7 @@ export class RegisterComponent {
       surName: ['', Validators.required],
       code: [''],
       phoneNumber: ['', Validators.required],
-      userTypeId: ['', Validators.required]
+      userTypeId: [1, Validators.required]
     });
   }
 

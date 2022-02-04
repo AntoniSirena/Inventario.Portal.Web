@@ -57,7 +57,6 @@ export class InventoryComponent implements OnInit {
   items = new Array<Product>();
 
   searchItem: string;
-  timerSearchItem: any = 0;
 
 
   constructor(
@@ -123,20 +122,24 @@ export class InventoryComponent implements OnInit {
             quantity: ['', Validators.required],
           });
 
-          this.showItemModalReference = this.modalService.open(this.showItemModal, { size: 'lg', backdrop: 'static', scrollable: true });
+          this.showItemModalReference = this.modalService.open(this.showItemModal, { size: 'lg', backdrop: 'static', scrollable: true });      
+          this.setFocus_CurrentQuantity();
 
         } else {
 
           this.showItemsModalReference = this.modalService.open(this.showItemsModal, { size: 'lg', backdrop: 'static', scrollable: true });
+          $("#searchItem").blur();
+          this.setFocus_CurrentQuantity();
         }
 
       } else {
+        this.setFocus_SearchItems();
         Swal.fire({
           icon: 'warning',
           title: response.Message,
           showConfirmButton: true,
           timer: 3000
-        });
+        })
       }
 
     },
@@ -146,19 +149,11 @@ export class InventoryComponent implements OnInit {
   }
 
 
-  //get items automatic
-  getItemsByTime(input: string) {
-    clearTimeout(this.timerSearchItem);
-    this.timerSearchItem = setTimeout(() => {
-      this.getItems(input);
-    }, 2000);
-  }
-
-
   //get inventory details
   getInventoryDetails() {
     this.inventoryService.getInventoryDetails(this.currentInventory.Id).subscribe((response: Iresponse) => {
       this.inventoryDetails = response.Data;
+      this.setFocus_SearchItems();
     },
       error => {
         console.log(JSON.stringify(error));
@@ -181,6 +176,7 @@ export class InventoryComponent implements OnInit {
     });
 
     this.showItemModalReference = this.modalService.open(this.showItemModal, { size: 'lg', backdrop: 'static', scrollable: true });
+    this.setFocus_CurrentQuantity();
 
   }
 
@@ -198,6 +194,7 @@ export class InventoryComponent implements OnInit {
     });
 
     this.showItemModalReference = this.modalService.open(this.showItemModal, { size: 'lg', backdrop: 'static', scrollable: true });
+    this.setFocus_CurrentQuantity();
 
   }
 
@@ -274,6 +271,7 @@ export class InventoryComponent implements OnInit {
 
     this.inventoryService.saveItem(data).subscribe((response: Iresponse) => {
       if (response.Code === '000') {
+        this.setFocus_SearchItems();
 
         Swal.fire({
           position: 'top-end',
@@ -507,6 +505,7 @@ export class InventoryComponent implements OnInit {
     this.getInventoryDetails();
 
     this.modalService.open(this.countItemModal, { size: 'xl', backdrop: 'static', scrollable: true });
+    this.setFocus_SearchItems();
   }
 
 
@@ -566,5 +565,12 @@ export class InventoryComponent implements OnInit {
     });
   }
 
+  setFocus_SearchItems(){
+    $("#searchItem").focus();
+  }
+
+  setFocus_CurrentQuantity(){
+    $("#currentQuantity").focus();
+  }
 
 }

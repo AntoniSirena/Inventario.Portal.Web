@@ -163,16 +163,22 @@
   <div class="modal-body">
 
     <div class="row">
-      <div class="col-xs-12 col-sm-12 col-lg-12">
+      <div class="col-md-9">
         <div class="form-group">
-          <label class="bold">Buscar items</label>
-          <input type="text" [(ngModel)]="searchItem" #_searchItem class="form-control bold"
-            (ngModelChange)="getItemsByTime(searchItem)" placeholder="Ingrese el parámetro de busqueda">
+          <input type="text" [(ngModel)]="searchItem" id="searchItem" class="form-control bold"
+          (keydown.enter)="getItems(searchItem)" placeholder="Ingrese el parámetro de busqueda">
 
         </div>
       </div>
+
+      <div class="col-md-3">
+        <button type="button" class="btn btn-primary btn-large btn-block bold"
+         (click)="getItems(searchItem)" style="font-size: 20px;"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Buscar items</button>
+      </div>
+
     </div>
 
+    <br>
     <br>
 
     <div class="row">
@@ -180,6 +186,11 @@
         <button type="button" class="btn btn-primary btn-large btn-block bold" style="font-size: 18px;"
           (click)="getInventoryDetails()">Refrescar items</button>
       </div>
+
+      <div class="col-sm-3">
+        <span class="bold" style="font-size: 22px;">Total de items : {{inventoryDetails.length}}</span>
+      </div>
+
     </div>
 
     <br>
@@ -250,43 +261,39 @@
     </button>
   </div>
   <div class="modal-body">
+    
+    <span class="bold">{{items[0].Description}}</span>
 
-    <div *ngFor="let item of items">
+    <form [formGroup]="countItemForm" (submit)="saveItem(countItemForm.value)">
 
-      <span class="bold">{{item.Description}}</span>
+      <br>
 
-      <form [formGroup]="countItemForm" (submit)="saveItem(countItemForm.value)">
+      <label for="cost" class="bold">Costo</label>
+      <div class="input-group mb-3">
+        <input type="number" formControlName="cost" class="form-control">
+        <div *ngIf="!countItemForm.value.cost" class="required">*</div>
+      </div>
 
-        <br>
+      <label for="price" class="bold">Precio</label>
+      <div class="input-group mb-3">
+        <input type="number" formControlName="price" class="form-control">
+        <div *ngIf="!countItemForm.value.price" class="required">*</div>
+      </div>
 
-        <label for="cost" class="bold">Costo</label>
-        <div class="input-group mb-3">
-          <input type="number" formControlName="cost" class="form-control">
-          <div *ngIf="!countItemForm.value.cost" class="required">*</div>
+      <label for="quantity" class="bold">Cantidad</label>
+      <div class="input-group mb-3">
+        <input id="currentQuantity" type="number" formControlName="quantity" class="form-control">
+        <div *ngIf="!countItemForm.value.quantity" class="required">*</div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-2">
+          <button id="saveItem" type="submit" class="btn btn-primary btn-large btn-block bold"
+            style="font-size: 18px;" [disabled]="countItemForm.invalid">Guardar</button>
         </div>
+      </div>
 
-        <label for="price" class="bold">Precio</label>
-        <div class="input-group mb-3">
-          <input type="number" formControlName="price" class="form-control">
-          <div *ngIf="!countItemForm.value.price" class="required">*</div>
-        </div>
-
-        <label for="quantity" class="bold">Cantidad</label>
-        <div class="input-group mb-3">
-          <input type="number" formControlName="quantity" class="form-control">
-          <div *ngIf="!countItemForm.value.quantity" class="required">*</div>
-        </div>
-
-        <div class="row">
-          <div class="col-sm-2">
-            <button id="saveItem" type="submit" class="btn btn-primary btn-large btn-block bold"
-              style="font-size: 18px;" [disabled]="countItemForm.invalid">Guardar</button>
-          </div>
-        </div>
-
-      </form>
-
-    </div>
+    </form>
 
   </div>
 
