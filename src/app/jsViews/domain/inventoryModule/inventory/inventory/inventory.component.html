@@ -1,6 +1,6 @@
 <!--Call spinner-->
 <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="rgb(152, 214, 218)" type="timer">
-  <p style="font-size: 20px; color: white">Guardando productos...</p>
+  <p style="font-size: 20px; color: white">{{message}}</p>
 </ngx-spinner>
 
 <br>
@@ -211,10 +211,10 @@
             <th>Código externo</th>
             <th>Código de barra</th>
             <th>Descripción</th>
-            <th>Costo anterior</th>
-            <th>Precio anterior</th>
-            <th>Costo actual</th>
-            <th>Precio actual</th>
+            <th *ngIf="userData.ShowCost">Costo anterior</th>
+            <th *ngIf="userData.ShowPrice">Precio anterior</th>
+            <th *ngIf="userData.ShowCost">Costo actual</th>
+            <th  *ngIf="userData.ShowPrice">Precio actual</th>
             <th>Cantidad</th>
             <th>Usuario</th>
             <th></th>
@@ -227,10 +227,10 @@
             <td>{{item.ExternalCode}}</td>
             <td>{{item.BarCode}}</td>
             <td>{{item.Description}}</td>
-            <td>{{item.OldCost}}</td>
-            <td>{{item.OldPrice}}</td>
-            <td>{{item.Cost}}</td>
-            <td>{{item.Price}}</td>
+            <td *ngIf="userData.ShowCost">{{item.OldCost}}</td>
+            <td *ngIf="userData.ShowPrice">{{item.OldPrice}}</td>
+            <td *ngIf="userData.ShowCost">{{item.Cost}}</td>
+            <td *ngIf="userData.ShowPrice">{{item.Price}}</td>
             <td>{{item.Quantity}}</td>
             <td>{{item.UserName}}</td>
             <td class="right"> <button type="button" class="btn btn-danger bold" (click)="deleteInventoryDetail(item.InventoryDetailId)">
@@ -255,29 +255,23 @@
 <!--Show item-->
 <ng-template #showItemModal let-modal>
   <div class="modal-header">
-    <h4 class="modal-title">Item encontrado</h4>
+    <h6 class="bold">{{items[0].Description}}</h6>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
     
-    <span class="bold">{{items[0].Description}}</span>
-
     <form [formGroup]="countItemForm" (submit)="saveItem(countItemForm.value)">
 
-      <br>
-
-      <label for="cost" class="bold">Costo</label>
-      <div class="input-group mb-3">
+      <label for="cost" class="bold" *ngIf="userData.ShowCost">Costo</label>
+      <div class="input-group mb-3" *ngIf="userData.ShowCost">
         <input type="number" formControlName="cost" class="form-control">
-        <div *ngIf="!countItemForm.value.cost" class="required">*</div>
       </div>
 
-      <label for="price" class="bold">Precio</label>
-      <div class="input-group mb-3">
+      <label for="price" class="bold" *ngIf="userData.ShowPrice">Precio</label>
+      <div class="input-group mb-3" *ngIf="userData.ShowPrice">
         <input type="number" formControlName="price" class="form-control">
-        <div *ngIf="!countItemForm.value.price" class="required">*</div>
       </div>
 
       <label for="quantity" class="bold">Cantidad</label>
@@ -318,8 +312,8 @@
             <th>Descripción</th>
             <th>Código externo</th>
             <th>Código de barra</th>
-            <th>Costo</th>
-            <th>Precio</th>
+            <th *ngIf="userData.ShowCost">Costo</th>
+            <th *ngIf="userData.ShowPrice">Precio</th>
             <th></th>
           </tr>
         </thead>
@@ -329,8 +323,8 @@
             <td>{{item.Description}}</td>
             <td>{{item.ExternalCode}}</td>
             <td>{{item.BarCode}}</td>
-            <td>{{item.Cost}}</td>
-            <td>{{item.Price}}</td>
+            <td *ngIf="userData.ShowCost">{{item.Cost}}</td>
+            <td *ngIf="userData.ShowPrice">{{item.Price}}</td>
             <td class="right"> <button type="button" class="btn btn-primary bold"
                 (click)="addItemToCount(item)">Seleccionar</button> </td>
           </tr>

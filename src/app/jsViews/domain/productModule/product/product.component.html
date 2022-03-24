@@ -39,8 +39,8 @@
             <th>Código externo</th>
             <th>Código de barra</th>
             <th>Descripción</th>
-            <th>Costo</th>
-            <th>Precio</th>
+            <th *ngIf="userData.ShowCost">Costo</th>
+            <th *ngIf="userData.ShowPrice">Precio</th>
             <th class="right" *ngIf="canDelete"></th>
             <th class="right" *ngIf="canCreate"><button type="button" class="btn btn-success"
                 (click)="openCreateModal()"><i class="fa fa-plus"></i>&nbsp;Nuevo</button></th>
@@ -53,8 +53,8 @@
             <td>{{item.ExternalCode}}</td>
             <td>{{item.BarCode}}</td>
             <td>{{item.Description}}</td>
-            <td>{{item.Cost | currency}}</td>
-            <td>{{item.Price | currency}}</td>
+            <td *ngIf="userData.ShowCost">{{item.Cost | currency}}</td>
+            <td *ngIf="userData.ShowPrice">{{item.Price | currency}}</td>
             <td class="right" *ngIf="canDelete"> <button type="button" class="btn btn-danger" (click)="delete(item.Id)"><i
                   class="fa fa-remove"></i>&nbsp;Eliminar</button> </td>
             <td class="right" *ngIf="canEdit"><button type="button" class="btn btn-primary"
@@ -100,14 +100,14 @@
             <input type="text" formControlName="barCode" class="form-control">
         </div>
 
-        <label for="cost" class="bold">Costo</label>
-        <div class="input-group mb-3">
+        <label for="cost" class="bold" *ngIf="userData.ShowCost">Costo</label>
+        <div class="input-group mb-3" *ngIf="userData.ShowCost">
             <input type="number" formControlName="cost" class="form-control">
             <div *ngIf="!createForm.value.cost" class="required">*</div>
         </div>
 
-        <label for="price" class="bold">Precio</label>
-        <div class="input-group mb-3">
+        <label for="price" class="bold" *ngIf="userData.ShowPrice">Precio</label>
+        <div class="input-group mb-3" *ngIf="userData.ShowPrice">
             <input type="number" formControlName="price" class="form-control">
             <div *ngIf="!createForm.value.price" class="required">*</div>
         </div>
@@ -158,14 +158,14 @@
             <input type="text" formControlName="barCode" class="form-control">
         </div>
 
-        <label for="cost" class="bold">Costo</label>
-        <div class="input-group mb-3">
+        <label for="cost" class="bold" *ngIf="userData.ShowCost">Costo</label>
+        <div class="input-group mb-3" *ngIf="userData.ShowCost">
             <input type="number" formControlName="cost" class="form-control">
             <div *ngIf="!editForm.value.cost" class="required">*</div>
         </div>
 
-        <label for="price" class="bold">Precio</label>
-        <div class="input-group mb-3">
+        <label for="price" class="bold" *ngIf="userData.ShowPrice">Precio</label>
+        <div class="input-group mb-3" *ngIf="userData.ShowPrice">
             <input type="number" formControlName="price" class="form-control">
             <div *ngIf="!editForm.value.price" class="required">*</div>
         </div>
@@ -214,8 +214,8 @@
                   <th>Código externo</th>
                   <th>Código de barra</th>
                   <th>Descripción</th>
-                  <th>Costo</th>
-                  <th>Precio</th>
+                  <th *ngIf="userData.ShowCost">Costo</th>
+                  <th *ngIf="userData.ShowPrice">Precio</th>
                 </tr>
               </thead>
               <tbody>
@@ -224,8 +224,8 @@
                   <td>{{item.ExternalCode}}</td>
                   <td>{{item.BarCode}}</td>
                   <td>{{item.Description}}</td>
-                  <td>{{item.Cost | currency}}</td>
-                  <td>{{item.Price | currency}}</td>
+                  <td *ngIf="userData.ShowCost">{{item.Cost | currency}}</td>
+                  <td *ngIf="userData.ShowPrice">{{item.Price | currency}}</td>
                 </tr>
               </tbody>
             </table>

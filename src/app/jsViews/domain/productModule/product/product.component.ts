@@ -8,6 +8,8 @@ import Swal from 'sweetalert2';
 import { Iresponse } from '../../../../interfaces/Iresponse/iresponse';
 import * as XLSX from 'ts-xlsx';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { User } from '../../../../models/profile/profile';
+import { BaseService } from '../../../../services/base/base.service';
 
 
 @Component({
@@ -43,16 +45,20 @@ export class ProductComponent implements OnInit {
   products = new Array<Product>();
   productModel = new ProductModel;
 
+  userData = new User();
+
   constructor(
     private productService: ProductService,
     private modalService: NgbModal,
     private form: FormBuilder,
     private spinnerService: NgxSpinnerService,
+    private baseService: BaseService,
   ) { }
 
 
   ngOnInit(): void {
     this.getAll();
+    this.userData = this.baseService.getUserData();
   }
 
 

@@ -11,6 +11,7 @@ import { Iresponse } from '../../../../../interfaces/Iresponse/iresponse';
 import { Product } from './../../../../../models/domain/product';
 import { BaseService } from '../../../../../services/base/base.service';
 import { environment } from '../../../../../environments/environment';
+import { User } from '../../../../../models/profile/profile';
 
 
 
@@ -58,6 +59,10 @@ export class InventoryComponent implements OnInit {
 
   searchItem: string;
 
+  message: string;
+
+  userData = new User();
+
 
   constructor(
     private inventoryService: InventoryService,
@@ -70,6 +75,7 @@ export class InventoryComponent implements OnInit {
   ngOnInit(): void {
     this.getAll();
     this.canDoInventory = this.baseService.userData.CanDoInventory;
+    this.userData = this.baseService.getUserData();
   }
 
 
@@ -117,8 +123,8 @@ export class InventoryComponent implements OnInit {
 
           //Llenando count item form
           this.countItemForm = this.form.group({
-            cost: [this.items[0].Cost, Validators.required],
-            price: [this.items[0].Price, Validators.required],
+            cost: [this.items[0].Cost],
+            price: [this.items[0].Price],
             quantity: ['', Validators.required],
           });
 
@@ -151,11 +157,15 @@ export class InventoryComponent implements OnInit {
 
   //get inventory details
   getInventoryDetails() {
+    this.spinnerService.show();
+    this.message = 'Cagando items...';
+
     this.inventoryService.getInventoryDetails(this.currentInventory.Id).subscribe((response: Iresponse) => {
       this.inventoryDetails = response.Data;
-      this.setFocus_SearchItems();
+      this.spinnerService.hide();
     },
       error => {
+        this.spinnerService.hide();
         console.log(JSON.stringify(error));
       });
   }
@@ -170,8 +180,8 @@ export class InventoryComponent implements OnInit {
 
     //Llenando count item form
     this.countItemForm = this.form.group({
-      cost: [this.items[0].Cost, Validators.required],
-      price: [this.items[0].Price, Validators.required],
+      cost: [this.items[0].Cost],
+      price: [this.items[0].Price],
       quantity: ['', Validators.required],
     });
 
@@ -188,8 +198,8 @@ export class InventoryComponent implements OnInit {
 
     //Llenando count item form
     this.countItemForm = this.form.group({
-      cost: [this.items[0].Cost, Validators.required],
-      price: [this.items[0].Price, Validators.required],
+      cost: [this.items[0].Cost],
+      price: [this.items[0].Price],
       quantity: ['', Validators.required],
     });
 
@@ -559,8 +569,8 @@ export class InventoryComponent implements OnInit {
   //init count item from
   initCountItemFrom() {
     this.countItemForm = this.form.group({
-      cost: ['', Validators.required],
-      price: ['', Validators.required],
+      cost: [''],
+      price: [''],
       quantity: ['', Validators.required]
     });
   }

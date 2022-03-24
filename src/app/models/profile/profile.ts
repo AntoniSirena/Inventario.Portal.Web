@@ -23,7 +23,10 @@ export class User {
   RoleParent: string;
 
   EnableShoppingCart: boolean;
+
   CanDoInventory: boolean;
+  ShowCost: boolean;
+  ShowPrice: boolean;
 
   //Crud
   CanCreate: boolean;
