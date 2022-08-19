@@ -30,6 +30,14 @@ export class InventoryService {
     return this.httpClient.get(this.coreURL + `api/inventory/GetItems?input=${input}`);
   }
 
+  getSection(): Observable<object> {
+    return this.httpClient.get(this.coreURL + 'api/inventory/GetSection');
+  }
+
+  getTariff(): Observable<object> {
+    return this.httpClient.get(this.coreURL + 'api/inventory/GetTariff');
+  }
+
   getInventoryDetails(inventoryId: number): Observable<object> {
     return this.httpClient.get(this.coreURL + `api/inventory/GetInventoryDetails?inventoryId=${inventoryId}`);
   }

@@ -215,6 +215,8 @@
             <th *ngIf="userData.ShowPrice">Precio anterior</th>
             <th *ngIf="userData.ShowCost">Costo actual</th>
             <th  *ngIf="userData.ShowPrice">Precio actual</th>
+            <th>Tramo</th>
+            <th>Bandeja</th>
             <th>Cantidad</th>
             <th>Usuario</th>
             <th></th>
@@ -231,6 +233,8 @@
             <td *ngIf="userData.ShowPrice">{{item.OldPrice}}</td>
             <td *ngIf="userData.ShowCost">{{item.Cost}}</td>
             <td *ngIf="userData.ShowPrice">{{item.Price}}</td>
+            <td>{{item.SectionDescription}}</td>
+            <td>{{item.TariffDescription}}</td>
             <td>{{item.Quantity}}</td>
             <td>{{item.UserName}}</td>
             <td class="right"> <button type="button" class="btn btn-danger bold" (click)="deleteInventoryDetail(item.InventoryDetailId)">
@@ -255,7 +259,7 @@
 <!--Show item-->
 <ng-template #showItemModal let-modal>
   <div class="modal-header">
-    <h6 class="bold">{{items[0].Description}}</h6>
+    <h5 class="bold" style="color: red;">{{items[0].Description}}</h5>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -279,6 +283,21 @@
         <input id="currentQuantity" type="number" formControlName="quantity" class="form-control">
         <div *ngIf="!countItemForm.value.quantity" class="required">*</div>
       </div>
+
+      <label class="bold">Seleccione el tramo</label>
+      <ng-select class="bold" [items]="sections" bindLabel="Description" bindValue="Id" virtualScroll="true" 
+        formControlName="sectionId">
+      </ng-select>
+
+      <br>
+
+      <label class="bold">Seleccione la bandeja</label>
+      <ng-select class="bold" [items]="tariffs" bindLabel="Description" bindValue="Id" virtualScroll="true"
+        formControlName="tariffId">
+      </ng-select>
+
+      <br>
+      <br>
 
       <div class="row">
         <div class="col-sm-2">

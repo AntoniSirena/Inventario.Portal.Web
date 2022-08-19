@@ -9,10 +9,16 @@ export class Product {
     OldPrice: number;
     Cost: number;
     Price: number;
+    Reference: string;
+    Existence: number;
     InventoryId: number;
     InventoryDetailId: number;
     Quantity: number;
     UserName: string;
+    SectionId: number;
+    TariffId: number;
+    SectionDescription: string;
+    TariffDescription: string;
 }
 
 export class ProductModel extends Audit {
@@ -23,4 +29,6 @@ export class ProductModel extends Audit {
     BarCode: string;
     Cost: number;
     Price: number;
+    Reference: string;
+    Existence: number;
 }

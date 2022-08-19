@@ -9,10 +9,9 @@ import {
   HttpErrorResponse
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { tap, map } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { BaseService } from '../../services/base/base.service';
 import { RedirectService } from '../../services/redirect/redirect.service';
-import { Ilogin } from '../../interfaces/Ilogin/ilogin';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 
@@ -47,8 +46,6 @@ export class RequestInterceptorService implements HttpInterceptor {
     } else {
       headers = headers.append('Authorization', `${this.token}`);
     }
-
-    headers = headers.append('Access-Control-Allow-Origin', '*');
 
     const reqclone = req.clone({
       headers

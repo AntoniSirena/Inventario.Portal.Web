@@ -21,3 +21,15 @@ export class InventoryModel extends Audit {
     OpenDate: string;
     ClosedDate: string;
 }
+
+export class Section {
+    Id: number;
+    Description: string;
+    ShortName: string;
+}
+
+export class Tariff {
+    Id: number;
+    Description: string;
+    ShortName: string;
+}

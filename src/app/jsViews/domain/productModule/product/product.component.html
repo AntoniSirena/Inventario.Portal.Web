@@ -37,8 +37,10 @@
           <tr class="tabl_eHeader_Color">
             <th>Código interno</th>
             <th>Código externo</th>
-            <th>Código de barra</th>
             <th>Descripción</th>
+            <th>Código de barra</th>
+            <th>Referencia</th>
+            <th>Cantidad</th>
             <th *ngIf="userData.ShowCost">Costo</th>
             <th *ngIf="userData.ShowPrice">Precio</th>
             <th class="right" *ngIf="canDelete"></th>
@@ -51,8 +53,10 @@
             *ngFor="let item of products | filter : searchText2 | paginate: { itemsPerPage: 12, currentPage: p1, id: 'page1'}">
             <td>{{item.Id}}</td>
             <td>{{item.ExternalCode}}</td>
-            <td>{{item.BarCode}}</td>
             <td>{{item.Description}}</td>
+            <td>{{item.BarCode}}</td>
+            <td>{{item.Reference}}</td>
+            <td>{{item.Existence}}</td>
             <td *ngIf="userData.ShowCost">{{item.Cost | currency}}</td>
             <td *ngIf="userData.ShowPrice">{{item.Price | currency}}</td>
             <td class="right" *ngIf="canDelete"> <button type="button" class="btn btn-danger" (click)="delete(item.Id)"><i
@@ -98,6 +102,16 @@
         <label for="barCode" class="bold">Código de barra</label>
         <div class="input-group mb-3">
             <input type="text" formControlName="barCode" class="form-control">
+        </div>
+
+        <label for="reference" class="bold">Referencia</label>
+        <div class="input-group mb-3">
+            <input type="text" formControlName="reference" class="form-control">
+        </div>
+
+        <label for="existence" class="bold">Catidad</label>
+        <div class="input-group mb-3">
+            <input type="number" formControlName="existence" class="form-control">
         </div>
 
         <label for="cost" class="bold" *ngIf="userData.ShowCost">Costo</label>
@@ -158,6 +172,16 @@
             <input type="text" formControlName="barCode" class="form-control">
         </div>
 
+        <label for="reference" class="bold">Referencia</label>
+        <div class="input-group mb-3">
+            <input type="text" formControlName="reference" class="form-control">
+        </div>
+
+        <label for="existence" class="bold">Catidad</label>
+        <div class="input-group mb-3">
+            <input type="number" formControlName="existence" class="form-control">
+        </div>
+
         <label for="cost" class="bold" *ngIf="userData.ShowCost">Costo</label>
         <div class="input-group mb-3" *ngIf="userData.ShowCost">
             <input type="number" formControlName="cost" class="form-control">
@@ -212,8 +236,10 @@
               <thead>
                 <tr class="tabl_eHeader_Color">
                   <th>Código externo</th>
-                  <th>Código de barra</th>
                   <th>Descripción</th>
+                  <th>Código de barra</th>
+                  <th>Referencia</th>
+                  <th>Catidad</th>
                   <th *ngIf="userData.ShowCost">Costo</th>
                   <th *ngIf="userData.ShowPrice">Precio</th>
                 </tr>
@@ -222,8 +248,10 @@
                 <tr
                   *ngFor="let item of excelProducts | filter : searchText3 | paginate: { itemsPerPage: 12, currentPage: p2, id: 'page2'}">
                   <td>{{item.ExternalCode}}</td>
-                  <td>{{item.BarCode}}</td>
                   <td>{{item.Description}}</td>
+                  <td>{{item.BarCode}}</td>
+                  <td>{{item.Reference}}</td>
+                  <td>{{item.Existence}}</td>
                   <td *ngIf="userData.ShowCost">{{item.Cost | currency}}</td>
                   <td *ngIf="userData.ShowPrice">{{item.Price | currency}}</td>
                 </tr>

@@ -10,6 +10,9 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
 //spinner
 import { NgxSpinnerModule } from "ngx-spinner"
 
+//ng-select
+import { NgSelectModule } from '@ng-select/ng-select';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InventoryRoutingModule } from './inventory-routing';
 import { InventoryComponent } from './inventory/inventory/inventory.component';
@@ -28,6 +31,8 @@ import { InventoryComponent } from './inventory/inventory/inventory.component';
     FormsModule,
     ReactiveFormsModule,
     NgxSpinnerModule,
+    NgSelectModule,
+    
   ]
 })
 export class InventoryModule { }

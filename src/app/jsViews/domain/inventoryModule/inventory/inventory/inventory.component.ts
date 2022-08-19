@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Inventory, InventoryModel } from '../../../../../models/domain/inventory';
+import { Inventory, InventoryModel, Tariff } from '../../../../../models/domain/inventory';
 import { InventoryService } from '../../../../../services/domain/inventory/inventory.service';
 import Swal from 'sweetalert2';
 import $ from 'jquery';
@@ -12,6 +12,7 @@ import { Product } from './../../../../../models/domain/product';
 import { BaseService } from '../../../../../services/base/base.service';
 import { environment } from '../../../../../environments/environment';
 import { User } from '../../../../../models/profile/profile';
+import { Section } from './../../../../../models/domain/inventory';
 
 
 
@@ -63,6 +64,9 @@ export class InventoryComponent implements OnInit {
 
   userData = new User();
 
+  sections = new Array<Section>();
+  tariffs = new Array<Tariff>();
+
 
   constructor(
     private inventoryService: InventoryService,
@@ -74,10 +78,11 @@ export class InventoryComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAll();
+    this.getSection();
+    this.getTariff();
     this.canDoInventory = this.baseService.userData.CanDoInventory;
     this.userData = this.baseService.getUserData();
   }
-
 
 
   getAll() {
@@ -126,6 +131,8 @@ export class InventoryComponent implements OnInit {
             cost: [this.items[0].Cost],
             price: [this.items[0].Price],
             quantity: ['', Validators.required],
+            sectionId: [this.items[0].SectionId],
+            tariffId: [this.items[0].TariffId]
           });
 
           this.showItemModalReference = this.modalService.open(this.showItemModal, { size: 'lg', backdrop: 'static', scrollable: true });      
@@ -148,6 +155,24 @@ export class InventoryComponent implements OnInit {
         })
       }
 
+    },
+      error => {
+        console.log(JSON.stringify(error));
+      });
+  }
+
+  getSection() {
+    this.inventoryService.getSection().subscribe((response: Array<Section>) => {
+      this.sections = response;
+    },
+      error => {
+        console.log(JSON.stringify(error));
+      });
+  }
+
+  getTariff() {
+    this.inventoryService.getTariff().subscribe((response: Array<Tariff>) => {
+      this.tariffs = response;
     },
       error => {
         console.log(JSON.stringify(error));
@@ -183,6 +208,8 @@ export class InventoryComponent implements OnInit {
       cost: [this.items[0].Cost],
       price: [this.items[0].Price],
       quantity: ['', Validators.required],
+      sectionId: [this.items[0].SectionId],
+      tariffId: [this.items[0].TariffId]
     });
 
     this.showItemModalReference = this.modalService.open(this.showItemModal, { size: 'lg', backdrop: 'static', scrollable: true });
@@ -201,6 +228,8 @@ export class InventoryComponent implements OnInit {
       cost: [this.items[0].Cost],
       price: [this.items[0].Price],
       quantity: ['', Validators.required],
+      sectionId: [this.items[0].SectionId],
+      tariffId: [this.items[0].TariffId]
     });
 
     this.showItemModalReference = this.modalService.open(this.showItemModal, { size: 'lg', backdrop: 'static', scrollable: true });
@@ -273,10 +302,16 @@ export class InventoryComponent implements OnInit {
       OldPrice: 0,
       Cost: form.cost,
       Price: form.price,
+      Reference: '',
+      Existence: 0,
       Quantity: form.quantity,
       InventoryId: this.currentInventory.Id,
       InventoryDetailId: this.items[0].InventoryDetailId,
       UserName: null,
+      SectionId: form.sectionId,
+      TariffId: form.tariffId,
+      SectionDescription: null,
+      TariffDescription: null,
     };
 
     this.inventoryService.saveItem(data).subscribe((response: Iresponse) => {
@@ -288,7 +323,7 @@ export class InventoryComponent implements OnInit {
           icon: 'success',
           title: response.Message,
           showConfirmButton: true,
-          timer: 2000
+          timer: 500
         }).then(() => {
           this.showItemModalReference.close();
         });
@@ -571,7 +606,9 @@ export class InventoryComponent implements OnInit {
     this.countItemForm = this.form.group({
       cost: [''],
       price: [''],
-      quantity: ['', Validators.required]
+      quantity: ['', Validators.required],
+      sectionId: [''],
+      tariffId: [''],
     });
   }
 

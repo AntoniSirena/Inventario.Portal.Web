@@ -8,4 +8,6 @@ export interface Iproduct extends Iaudit {
     BarCode: string;
     Cost: number;
     Price: number;
+    Reference: string;
+    Existence: number;
 }

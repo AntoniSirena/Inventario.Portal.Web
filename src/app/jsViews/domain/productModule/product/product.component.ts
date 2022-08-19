@@ -98,7 +98,6 @@ export class ProductComponent implements OnInit {
   }
 
 
-
   getAll() {
     this.spinnerService.show();
     this.loadingMessage = 'Cargando items';
@@ -126,6 +125,8 @@ export class ProductComponent implements OnInit {
         barCode: [this.productModel.BarCode],
         cost: [this.productModel.Cost, Validators.required],
         price: [this.productModel.Price, Validators.required],
+        reference: [this.productModel.Reference],
+        existence: [this.productModel.Existence],
       });
 
       this.modalService.open(this.editModal, { size: 'lg', backdrop: 'static', scrollable: true });
@@ -213,6 +214,8 @@ export class ProductComponent implements OnInit {
       BarCode: form.barCode,
       Cost: form.cost,
       Price: form.price,
+      Reference: form.reference,
+      Existence: form.existence,
       CreatorUserId: null,
       CreationTime: null,
       LastModifierUserId: null,
@@ -262,6 +265,8 @@ export class ProductComponent implements OnInit {
       BarCode: form.barCode,
       Cost: form.cost,
       Price: form.price,
+      Reference: form.reference,
+      Existence: form.existence,
       CreatorUserId: this.productModel.CreatorUserId,
       CreationTime: this.productModel.CreationTime,
       LastModifierUserId: this.productModel.LastModifierUserId,
@@ -352,6 +357,8 @@ export class ProductComponent implements OnInit {
       barCode: [''],
       cost: [0, Validators.required],
       price: [0, Validators.required],
+      reference: [''],
+      existence: [0],
     });
   }
 
@@ -364,6 +371,8 @@ export class ProductComponent implements OnInit {
       barCode: [''],
       cost: [0, Validators.required],
       price: [0, Validators.required],
+      reference: [''],
+      existence: [0],
     });
   }
 
