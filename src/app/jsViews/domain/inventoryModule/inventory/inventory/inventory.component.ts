@@ -13,6 +13,7 @@ import { BaseService } from '../../../../../services/base/base.service';
 import { environment } from '../../../../../environments/environment';
 import { User } from '../../../../../models/profile/profile';
 import { Section } from './../../../../../models/domain/inventory';
+import { Roles } from '../../../../../configurations/jsConfig';
 
 
 
@@ -67,6 +68,8 @@ export class InventoryComponent implements OnInit {
   sections = new Array<Section>();
   tariffs = new Array<Tariff>();
 
+  showProducExistence: boolean;
+  originSaveItem: string;
 
   constructor(
     private inventoryService: InventoryService,
@@ -82,8 +85,15 @@ export class InventoryComponent implements OnInit {
     this.getTariff();
     this.canDoInventory = this.baseService.userData.CanDoInventory;
     this.userData = this.baseService.getUserData();
+    this.checkoutPrivileges();
   }
 
+
+  checkoutPrivileges(){
+    if(this.userData.RoleShortName === Roles.SuperAdmin || this.userData.RoleShortName === Roles.Admin || this.userData.RoleShortName === Roles.Empresa){
+      this.showProducExistence = true;
+    }
+  }
 
   getAll() {
     this.inventoryService.getAll().subscribe((response: Array<Inventory>) => {
@@ -126,6 +136,8 @@ export class InventoryComponent implements OnInit {
 
         if (this.items.length == 1) {
 
+          this.originSaveItem = "ADD";
+
           //Llenando count item form
           this.countItemForm = this.form.group({
             cost: [this.items[0].Cost],
@@ -140,7 +152,7 @@ export class InventoryComponent implements OnInit {
 
         } else {
 
-          this.showItemsModalReference = this.modalService.open(this.showItemsModal, { size: 'lg', backdrop: 'static', scrollable: true });
+          this.showItemsModalReference = this.modalService.open(this.showItemsModal, { size: 'xl', backdrop: 'static', scrollable: true });
           $("#searchItem").blur();
           this.setFocus_CurrentQuantity();
         }
@@ -200,6 +212,8 @@ export class InventoryComponent implements OnInit {
   addItemToCount(item: Product) {
     this.showItemsModalReference.close();
 
+    this.originSaveItem = "ADD";
+
     this.items = new Array<Product>();
     this.items.push(item);
 
@@ -222,6 +236,8 @@ export class InventoryComponent implements OnInit {
   editInventoryDetail(item: Product) {
     this.items = new Array<Product>();
     this.items.push(item);
+
+    this.originSaveItem = "EDIT";
 
     //Llenando count item form
     this.countItemForm = this.form.group({
@@ -312,6 +328,7 @@ export class InventoryComponent implements OnInit {
       TariffId: form.tariffId,
       SectionDescription: null,
       TariffDescription: null,
+      Origin: this.originSaveItem,
     };
 
     this.inventoryService.saveItem(data).subscribe((response: Iresponse) => {

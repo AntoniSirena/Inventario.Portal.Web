@@ -23,7 +23,7 @@
   <div class="row">
     <div class="col-xs-12 col-sm-12 col-lg-12">
       <div class="form-group">
-        <input type="text" class="form-control" placeholder="Buscar" [(ngModel)]="searchText"
+        <input type="text" class="form-control" placeholder="Buscar" [(ngModel)]="searchTextPage1"
           [ngModelOptions]="{standalone: true}">
       </div>
     </div>
@@ -48,7 +48,7 @@
       </thead>
       <tbody>
         <tr
-          *ngFor="let item of inventories | filter : searchText | paginate: { itemsPerPage: 10, currentPage: p1, id: 'page1'}">
+          *ngFor="let item of inventories | filter : searchTextPage1 | paginate: { itemsPerPage: 10, currentPage: p1, id: page1}">
           <td>{{item.Id}}</td>
           <td>{{item.Description}}</td>
           <td class="td_min"> <span class="{{item.StatusColour}} center bold">{{item.Status}}</span> </td>
@@ -198,7 +198,7 @@
     <div class="row">
       <div class="col-xs-12 col-sm-12 col-lg-12">
         <div class="form-group">
-          <input type="text" class="form-control" placeholder="Buscar" [(ngModel)]="searchText"
+          <input type="text" class="form-control" placeholder="Buscar" [(ngModel)]="searchTextPage2"
             [ngModelOptions]="{standalone: true}">
         </div>
       </div>
@@ -209,15 +209,18 @@
         <thead>
           <tr class="tabl_eHeader_Color">
             <th>Código externo</th>
-            <th>Código de barra</th>
             <th>Descripción</th>
+            <th>Código de barra</th>
+            <th>Referencia</th>
+            <th *ngIf="showProducExistence">Cantidad actual</th>
+            <th>Cantidad contada</th>
+            <th *ngIf="showProducExistence">Diferencia</th>
             <th *ngIf="userData.ShowCost">Costo anterior</th>
             <th *ngIf="userData.ShowPrice">Precio anterior</th>
             <th *ngIf="userData.ShowCost">Costo actual</th>
-            <th  *ngIf="userData.ShowPrice">Precio actual</th>
-            <th>Tramo</th>
-            <th>Bandeja</th>
-            <th>Cantidad</th>
+            <th *ngIf="userData.ShowPrice">Precio actual</th>
+            <th *ngIf="userData.ShowSection">Tramo</th>
+            <th *ngIf="userData.ShowTariff">Bandeja</th>
             <th>Usuario</th>
             <th></th>
             <th></th>
@@ -225,17 +228,20 @@
         </thead>
         <tbody>
           <tr
-            *ngFor="let item of inventoryDetails | filter : searchText | paginate: { itemsPerPage: 10, currentPage: p2, id: 'page2'}">
+            *ngFor="let item of inventoryDetails | filter : searchTextPage2 | paginate: { itemsPerPage: 10, currentPage: p2, id: page2}">
             <td>{{item.ExternalCode}}</td>
-            <td>{{item.BarCode}}</td>
             <td>{{item.Description}}</td>
-            <td *ngIf="userData.ShowCost">{{item.OldCost}}</td>
-            <td *ngIf="userData.ShowPrice">{{item.OldPrice}}</td>
-            <td *ngIf="userData.ShowCost">{{item.Cost}}</td>
-            <td *ngIf="userData.ShowPrice">{{item.Price}}</td>
-            <td>{{item.SectionDescription}}</td>
-            <td>{{item.TariffDescription}}</td>
+            <td>{{item.BarCode}}</td>
+            <td>{{item.Reference}}</td>
+            <td *ngIf="showProducExistence">{{item.Existence}}</td>
             <td>{{item.Quantity}}</td>
+            <td class="bold" *ngIf="showProducExistence" [ngStyle]="{'color': item.Quantity - item.Existence >= 0 ? 'rgb(4, 155, 4)' : 'rgb(158, 12, 12)'}">{{item.Quantity - item.Existence}}</td>
+            <td *ngIf="userData.ShowCost">{{item.OldCost | currency}}</td>
+            <td *ngIf="userData.ShowPrice">{{item.OldPrice | currency}}</td>
+            <td *ngIf="userData.ShowCost">{{item.Cost | currency}}</td>
+            <td *ngIf="userData.ShowPrice">{{item.Price | currency}}</td>
+            <td *ngIf="userData.ShowSection">{{item.SectionDescription}}</td>
+            <td *ngIf="userData.ShowTariff">{{item.TariffDescription}}</td>
             <td>{{item.UserName}}</td>
             <td class="right"> <button type="button" class="btn btn-danger bold" (click)="deleteInventoryDetail(item.InventoryDetailId)">
               <i class="fa fa-remove"></i>&nbsp;Eliminar</button>
@@ -259,7 +265,7 @@
 <!--Show item-->
 <ng-template #showItemModal let-modal>
   <div class="modal-header">
-    <h5 class="bold" style="color: red;">{{items[0].Description}}</h5>
+    <h5 class="bold" style="color: red;">{{items[0].Description}} <span style="color: black;"> Ref : </span> {{items[0].Reference}}</h5>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -278,29 +284,38 @@
         <input type="number" formControlName="price" class="form-control">
       </div>
 
-      <label for="quantity" class="bold">Cantidad</label>
+      <div *ngIf="showProducExistence">
+        <label for="existence" class="bold">Cantidad actual</label>
+        <div class="input-group mb-3">
+          <input [disabled]="true" id="existence" type="number" [(ngModel)]="items[0].Existence" [ngModelOptions]="{standalone: true}" class="form-control">
+        </div>
+      </div>
+
+      <label for="currentQuantity" class="bold">Cantidad Contada</label>
       <div class="input-group mb-3">
         <input id="currentQuantity" type="number" formControlName="quantity" class="form-control">
         <div *ngIf="!countItemForm.value.quantity" class="required">*</div>
       </div>
 
-      <label class="bold">Seleccione el tramo</label>
-      <ng-select class="bold" [items]="sections" bindLabel="Description" bindValue="Id" virtualScroll="true" 
-        formControlName="sectionId">
-      </ng-select>
+      <div *ngIf="userData.ShowSection">
+        <label class="bold">Seleccione el tramo</label>
+        <ng-select class="bold" [items]="sections" bindLabel="Description" bindValue="Id" virtualScroll="true" 
+          formControlName="sectionId">
+        </ng-select>
+      </div>
 
       <br>
 
-      <label class="bold">Seleccione la bandeja</label>
-      <ng-select class="bold" [items]="tariffs" bindLabel="Description" bindValue="Id" virtualScroll="true"
-        formControlName="tariffId">
-      </ng-select>
+      <div *ngIf="userData.ShowTariff">
+        <label class="bold">Seleccione la bandeja</label>
+        <ng-select class="bold" [items]="tariffs" bindLabel="Description" bindValue="Id" virtualScroll="true"
+          formControlName="tariffId">
+        </ng-select>
+      </div>
 
-      <br>
-      <br>
 
       <div class="row">
-        <div class="col-sm-2">
+        <div class="col-sm-12">
           <button id="saveItem" type="submit" class="btn btn-primary btn-large btn-block bold"
             style="font-size: 18px;" [disabled]="countItemForm.invalid">Guardar</button>
         </div>
@@ -328,9 +343,11 @@
       <table class="table table-hover table-bordered table-condensed">
         <thead>
           <tr class="tabl_eHeader_Color">
-            <th>Descripción</th>
             <th>Código externo</th>
+            <th>Descripción</th>
             <th>Código de barra</th>
+            <th>Referencia</th>
+            <th *ngIf="showProducExistence">Cantidad</th>
             <th *ngIf="userData.ShowCost">Costo</th>
             <th *ngIf="userData.ShowPrice">Precio</th>
             <th></th>
@@ -339,11 +356,13 @@
         <tbody>
           <tr
             *ngFor="let item of items | filter : searchText | paginate: { itemsPerPage: 50, currentPage: p3, id: 'page3'}">
-            <td>{{item.Description}}</td>
             <td>{{item.ExternalCode}}</td>
+            <td>{{item.Description}}</td>
             <td>{{item.BarCode}}</td>
-            <td *ngIf="userData.ShowCost">{{item.Cost}}</td>
-            <td *ngIf="userData.ShowPrice">{{item.Price}}</td>
+            <td>{{item.Reference}}</td>
+            <td *ngIf="showProducExistence">{{item.Existence}}</td>
+            <td *ngIf="userData.ShowCost">{{item.Cost | currency}}</td>
+            <td *ngIf="userData.ShowPrice">{{item.Price | currency}}</td>
             <td class="right"> <button type="button" class="btn btn-primary bold"
                 (click)="addItemToCount(item)">Seleccionar</button> </td>
           </tr>

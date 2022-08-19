@@ -19,6 +19,7 @@ export class Product {
     TariffId: number;
     SectionDescription: string;
     TariffDescription: string;
+    Origin: string;
 }
 
 export class ProductModel extends Audit {

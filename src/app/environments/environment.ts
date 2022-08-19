@@ -5,6 +5,6 @@
 
 export const environment = {
   production: false,
-  //coreURL: 'http://fast-inventario.jssoluctech.com/core/'
-  coreURL: '/'
+  coreURL: 'http://fast-inventario.jssoluctech.com/core/'
+  //coreURL: '/'
 };

@@ -27,6 +27,8 @@ export class User {
   CanDoInventory: boolean;
   ShowCost: boolean;
   ShowPrice: boolean;
+  ShowSection: boolean;
+  ShowTariff: boolean;
 
   //Crud
   CanCreate: boolean;
