@@ -14,6 +14,8 @@ export class Product {
     InventoryId: number;
     InventoryDetailId: number;
     Quantity: number;
+    TotalAmount: number;
+    Difference: number;
     UserName: string;
     SectionId: number;
     TariffId: number;

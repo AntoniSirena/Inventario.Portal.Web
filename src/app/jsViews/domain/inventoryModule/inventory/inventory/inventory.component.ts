@@ -71,6 +71,8 @@ export class InventoryComponent implements OnInit {
   showProducExistence: boolean;
   originSaveItem: string;
 
+  currentUserNameByInventory: string;
+
   constructor(
     private inventoryService: InventoryService,
     private modalService: NgbModal,
@@ -299,10 +301,10 @@ export class InventoryComponent implements OnInit {
   //save item
   saveItem(form: any) {
 
-    if (!form.quantity) {
+    if (form.quantity < 0) {
       Swal.fire({
         icon: 'warning',
-        title: 'La cantidad debe ser mayor a 0',
+        title: 'La cantidad debe ser mayor o igual 0',
         showConfirmButton: true,
         timer: 3000
       });
@@ -321,6 +323,8 @@ export class InventoryComponent implements OnInit {
       Reference: '',
       Existence: 0,
       Quantity: form.quantity,
+      TotalAmount: 0,
+      Difference: 0,
       InventoryId: this.currentInventory.Id,
       InventoryDetailId: this.items[0].InventoryDetailId,
       UserName: null,
@@ -565,6 +569,7 @@ export class InventoryComponent implements OnInit {
     this.searchItem = '';
     this.currentInventory = inventory;
     this.getInventoryDetails();
+    this.currentUserNameByInventory = inventory.UserName;
 
     this.modalService.open(this.countItemModal, { size: 'xl', backdrop: 'static', scrollable: true });
     this.setFocus_SearchItems();

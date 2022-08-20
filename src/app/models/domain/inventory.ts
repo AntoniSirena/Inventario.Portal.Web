@@ -11,6 +11,7 @@ export class Inventory {
     UserName: string;
     OpenDate: string;
     ClosedDate: string;
+    TotalAmount: number;
 }
 
 export class InventoryModel extends Audit {

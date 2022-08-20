@@ -6,7 +6,6 @@
 <br>
 
 
-
 <div *ngIf="canDoInventory">
 
   <h3>Inventarios a la fecha</h3>
@@ -38,6 +37,7 @@
           <th>Estado</th>
           <th>Fecha de apertura</th>
           <th>Fecha de cierre</th>
+          <th *ngIf="showProducExistence">Valor del inventario</th>
           <th>Usuario</th>
           <th class="right" *ngIf="canDelete"></th>
           <th class="right" *ngIf="canEdit"></th>
@@ -54,6 +54,7 @@
           <td class="td_min"> <span class="{{item.StatusColour}} center bold">{{item.Status}}</span> </td>
           <td>{{item.OpenDate}}</td>
           <td>{{item.ClosedDate}}</td>
+          <td *ngIf="showProducExistence">{{item.TotalAmount | currency}}</td>
           <td>{{item.UserName}}</td>
           <td class="right" *ngIf="canDelete"> <button type="button" [disabled]="item.StatuShortName !== 'Open' "
               class="btn btn-danger bold" (click)="delete(item.Id)"><i class="fa fa-remove"></i>&nbsp;Eliminar</button>
@@ -155,7 +156,7 @@
 <!--Edit count item-->
 <ng-template #countItemModal let-modal>
   <div class="modal-header">
-    <h4 class="modal-title">Conteo físico de mercancías</h4>
+    <h4 class="modal-title">Conteo físico de mercancías perteneciente al usuario: <span style="color: red;">{{currentUserNameByInventory}}</span> </h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -219,6 +220,7 @@
             <th *ngIf="userData.ShowPrice">Precio anterior</th>
             <th *ngIf="userData.ShowCost">Costo actual</th>
             <th *ngIf="userData.ShowPrice">Precio actual</th>
+            <th *ngIf="showProducExistence">Valor del inventario</th>
             <th *ngIf="userData.ShowSection">Tramo</th>
             <th *ngIf="userData.ShowTariff">Bandeja</th>
             <th>Usuario</th>
@@ -235,11 +237,12 @@
             <td>{{item.Reference}}</td>
             <td *ngIf="showProducExistence">{{item.Existence}}</td>
             <td>{{item.Quantity}}</td>
-            <td class="bold" *ngIf="showProducExistence" [ngStyle]="{'color': item.Quantity - item.Existence >= 0 ? 'rgb(4, 155, 4)' : 'rgb(158, 12, 12)'}">{{item.Quantity - item.Existence}}</td>
+            <td class="bold" *ngIf="showProducExistence" [ngStyle]="{'color': item.Difference >= 0 ? 'rgb(4, 155, 4)' : 'rgb(158, 12, 12)'}">{{item.Difference}}</td>
             <td *ngIf="userData.ShowCost">{{item.OldCost | currency}}</td>
             <td *ngIf="userData.ShowPrice">{{item.OldPrice | currency}}</td>
             <td *ngIf="userData.ShowCost">{{item.Cost | currency}}</td>
             <td *ngIf="userData.ShowPrice">{{item.Price | currency}}</td>
+            <td class="bold" *ngIf="showProducExistence" [ngStyle]="{'color': item.Difference >= 0 ? 'rgb(4, 155, 4)' : 'rgb(158, 12, 12)'}">{{item.TotalAmount | currency}}</td>
             <td *ngIf="userData.ShowSection">{{item.SectionDescription}}</td>
             <td *ngIf="userData.ShowTariff">{{item.TariffDescription}}</td>
             <td>{{item.UserName}}</td>
@@ -313,7 +316,7 @@
         </ng-select>
       </div>
 
-
+      <br>
       <div class="row">
         <div class="col-sm-12">
           <button id="saveItem" type="submit" class="btn btn-primary btn-large btn-block bold"
