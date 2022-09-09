@@ -16,6 +16,12 @@
       <button type="button" class="btn btn-primary btn-large btn-block bold" style="font-size: 17px;"
         (click)="openCreateModal()">Aperturar inventario</button>
     </div>
+
+    <div class="col-md-2">
+      <button type="button" class="btn btn-success btn-large btn-block bold" style="font-size: 17px;"
+        (click)="getAll()"><i class="fa fa-refresh" aria-hidden="true"></i>&nbsp;&nbsp;Refrescar</button>
+    </div>
+
   </div>
   <br>
 
@@ -230,7 +236,7 @@
         </thead>
         <tbody>
           <tr
-            *ngFor="let item of inventoryDetails | filter : searchTextPage2 | paginate: { itemsPerPage: 10, currentPage: p2, id: page2}">
+            *ngFor="let item of inventoryDetails | filter : searchTextPage2 | paginate: { itemsPerPage: 5, currentPage: p2, id: page2}">
             <td>{{item.ExternalCode}}</td>
             <td>{{item.Description}}</td>
             <td>{{item.BarCode}}</td>
