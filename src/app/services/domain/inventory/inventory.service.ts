@@ -42,6 +42,9 @@ export class InventoryService {
     return this.httpClient.get(this.coreURL + `api/inventory/GetInventoryDetails?inventoryId=${inventoryId}`);
   }
 
+  getInventoryDetails_Paginated(inventoryId: number, pageNumber: number = 1, filter: string = ''): Observable<object> {
+    return this.httpClient.get(this.coreURL + `api/inventory/GetInventoryDetails_Paginated?inventoryId=${inventoryId}&pageNumber=${pageNumber}&filter=${filter}`);
+  }
 
   closedInventory(id: number): Observable<object> {
     return this.httpClient.get(this.coreURL + `api/inventory/ClosedInventory?id=${id}`);
@@ -73,6 +76,7 @@ export class InventoryService {
   deleteInventoryDetail(id: number): Observable<object> {
     return this.httpClient.delete(this.coreURL + `api/inventory/DeleteInventoryDetail?id=${id}`);
   }
+  
 
   
 }

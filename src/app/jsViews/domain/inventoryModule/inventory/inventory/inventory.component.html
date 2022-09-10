@@ -54,7 +54,7 @@
       </thead>
       <tbody>
         <tr
-          *ngFor="let item of inventories | filter : searchTextPage1 | paginate: { itemsPerPage: 10, currentPage: p1, id: page1}">
+          *ngFor="let item of inventories | filter : searchTextPage1 | paginate: { itemsPerPage: 10, currentPage: p1, id: 'page1'}">
           <td>{{item.Id}}</td>
           <td>{{item.Description}}</td>
           <td class="td_min"> <span class="{{item.StatusColour}} center bold">{{item.Status}}</span> </td>
@@ -82,7 +82,7 @@
         </tr>
       </tbody>
     </table>
-    <pagination-controls (pageChange)="p1 = $event" id='page1' autoHide="true" responsive="true"
+    <pagination-controls (pageChange)="p1 = $event" id="page1" autoHide="true" responsive="true"
       previousLabel="Anterior" nextLabel="Siguiente">
     </pagination-controls>
   </div>
@@ -191,11 +191,11 @@
     <div class="row">
       <div class="col-sm-3">
         <button type="button" class="btn btn-primary btn-large btn-block bold" style="font-size: 18px;"
-          (click)="getInventoryDetails()">Refrescar items</button>
+          (click)="getInventoryDetails_Paginated()">Refrescar items</button>
       </div>
 
       <div class="col-sm-3">
-        <span class="bold" style="font-size: 22px;">Total de items : {{inventoryDetails.length}}</span>
+        <span class="bold" style="font-size: 22px;">Total de items : {{objetPaginated?.Pagination?.TotalRecord}}</span>
       </div>
 
     </div>
@@ -205,8 +205,8 @@
     <div class="row">
       <div class="col-xs-12 col-sm-12 col-lg-12">
         <div class="form-group">
-          <input type="text" class="form-control" placeholder="Buscar" [(ngModel)]="searchTextPage2"
-            [ngModelOptions]="{standalone: true}">
+          <input type="text" class="form-control" placeholder="Buscar" [(ngModel)]="strInputDetail"
+          (keyup.enter)="_getInventoryDetails_Paginated_Next(1)" (ngModelChange)="getInventoryDetails_Paginated_Next(1)" [ngModelOptions]="{standalone: true}">
         </div>
       </div>
     </div>
@@ -236,7 +236,7 @@
         </thead>
         <tbody>
           <tr
-            *ngFor="let item of inventoryDetails | filter : searchTextPage2 | paginate: { itemsPerPage: 5, currentPage: p2, id: page2}">
+            *ngFor="let item of inventoryDetails | paginate: { itemsPerPage: objetPaginated?.Pagination?.PageRow, currentPage: p2, totalItems: objetPaginated?.Pagination?.TotalRecord, id: 'page2'}">
             <td>{{item.ExternalCode}}</td>
             <td>{{item.Description}}</td>
             <td>{{item.BarCode}}</td>
@@ -260,8 +260,7 @@
           </tr>
         </tbody>
       </table>
-      <pagination-controls (pageChange)="p2 = $event" id='page2' autoHide="true" responsive="true"
-        previousLabel="Anterior" nextLabel="Siguiente">
+      <pagination-controls (pageChange)="getInventoryDetails_Paginated_Next((p2 = $event))" id="page2" previousLabel="Anterior" nextLabel="Siguiente">
       </pagination-controls>
     </div>
 

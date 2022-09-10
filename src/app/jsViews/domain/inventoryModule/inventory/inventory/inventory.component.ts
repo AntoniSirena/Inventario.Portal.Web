@@ -14,6 +14,7 @@ import { environment } from '../../../../../environments/environment';
 import { User } from '../../../../../models/profile/profile';
 import { Section } from './../../../../../models/domain/inventory';
 import { Roles } from '../../../../../configurations/jsConfig';
+import { ObjetoPagination } from './../../../../../models/common/pagination';
 
 
 
@@ -60,6 +61,7 @@ export class InventoryComponent implements OnInit {
   items = new Array<Product>();
 
   searchItem: string;
+  strInputDetail: string;
 
   message: string;
 
@@ -70,8 +72,11 @@ export class InventoryComponent implements OnInit {
 
   showProducExistence: boolean;
   originSaveItem: string;
+  timerstrInputDetail: any = 0;
 
   currentUserNameByInventory: string;
+
+  objetPaginated: ObjetoPagination;
 
   constructor(
     private inventoryService: InventoryService,
@@ -91,8 +96,8 @@ export class InventoryComponent implements OnInit {
   }
 
 
-  checkoutPrivileges(){
-    if(this.userData.RoleShortName === Roles.SuperAdmin || this.userData.RoleShortName === Roles.Admin || this.userData.RoleShortName === Roles.Empresa){
+  checkoutPrivileges() {
+    if (this.userData.RoleShortName === Roles.SuperAdmin || this.userData.RoleShortName === Roles.Admin || this.userData.RoleShortName === Roles.Empresa) {
       this.showProducExistence = true;
     }
   }
@@ -149,7 +154,7 @@ export class InventoryComponent implements OnInit {
             tariffId: [this.items[0].TariffId]
           });
 
-          this.showItemModalReference = this.modalService.open(this.showItemModal, { size: 'lg', backdrop: 'static', scrollable: true });      
+          this.showItemModalReference = this.modalService.open(this.showItemModal, { size: 'lg', backdrop: 'static', scrollable: true });
           this.setFocus_CurrentQuantity();
 
         } else {
@@ -207,6 +212,48 @@ export class InventoryComponent implements OnInit {
         this.spinnerService.hide();
         console.log(JSON.stringify(error));
       });
+  }
+
+
+  //get inventory details
+  getInventoryDetails_Paginated() {
+    this.spinnerService.show();
+    this.message = 'Cagando items...';
+    this.strInputDetail = '';
+
+    this.inventoryService.getInventoryDetails_Paginated(this.currentInventory.Id).subscribe((response: Iresponse) => {
+      this.objetPaginated = response.Data;
+      this.inventoryDetails = this.objetPaginated.Records;
+      this.spinnerService.hide();
+    },
+      error => {
+        this.spinnerService.hide();
+        console.log(JSON.stringify(error));
+      });
+  }
+
+  //get inventory details
+  _getInventoryDetails_Paginated_Next(numbePage?: any) {
+
+    this.inventoryService.getInventoryDetails_Paginated(this.currentInventory.Id, numbePage, this.strInputDetail).subscribe((response: Iresponse) => {
+      if (response.Data?.Pagination) {
+        this.objetPaginated = response.Data;
+        this.inventoryDetails = this.objetPaginated.Records;
+      } else {
+        this.inventoryDetails = response.Data;
+      }
+    },
+      error => {
+        console.log(JSON.stringify(error));
+      });
+
+  }
+
+  getInventoryDetails_Paginated_Next(numbePage?: any) {
+    clearTimeout(this.timerstrInputDetail);
+    this.timerstrInputDetail = setTimeout(() => {
+      this._getInventoryDetails_Paginated_Next(numbePage);
+    }, 1000);
   }
 
 
@@ -568,7 +615,7 @@ export class InventoryComponent implements OnInit {
   openModalCountItem(inventory: Inventory) {
     this.searchItem = '';
     this.currentInventory = inventory;
-    this.getInventoryDetails();
+    this.getInventoryDetails_Paginated();
     this.currentUserNameByInventory = inventory.UserName;
 
     this.modalService.open(this.countItemModal, { size: 'xl', backdrop: 'static', scrollable: true });
@@ -578,29 +625,29 @@ export class InventoryComponent implements OnInit {
 
   //Export to excel
   exportToExcel(url: string, method: string, downloadName: string, data?: any) {
-    
+
     var xhr = new XMLHttpRequest();
     var _method = method || "GET";
     xhr.open(_method, url, true);
     xhr.responseType = 'blob';
     xhr.setRequestHeader("Content-Type", "application/json");
 
-    xhr.onload = function (e){
-      if(this.status == 200){
-        var blob = new Blob([this.response], {type: "application/xlsx"});
+    xhr.onload = function (e) {
+      if (this.status == 200) {
+        var blob = new Blob([this.response], { type: "application/xlsx" });
         var link = document.createElement('a');
         link.href = window.URL.createObjectURL(blob);
-        if(downloadName){
+        if (downloadName) {
           link.download = downloadName;
         }
         link.click();
       }
     };
 
-    if(data){
-      var _data = typeof data == 'object'? JSON.stringify(data): data;
+    if (data) {
+      var _data = typeof data == 'object' ? JSON.stringify(data) : data;
       xhr.send(_data);
-    }else{
+    } else {
       xhr.send();
     }
 
@@ -634,11 +681,11 @@ export class InventoryComponent implements OnInit {
     });
   }
 
-  setFocus_SearchItems(){
+  setFocus_SearchItems() {
     $("#searchItem").focus();
   }
 
-  setFocus_CurrentQuantity(){
+  setFocus_CurrentQuantity() {
     $("#currentQuantity").focus();
   }
 
