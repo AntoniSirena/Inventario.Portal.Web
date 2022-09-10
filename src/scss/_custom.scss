@@ -1,212 +1,218 @@
 // Here you can add other styles
 
-.required{
-    color: red;
-    font-weight: bold;
-    font-size: 20px;
-  }
-
-  //Color del buton cerrar de los modales
-  .close {
-    color: red; 
-    opacity: 1;
-    font-size: 25px;
+.required {
+  color: red;
+  font-weight: bold;
+  font-size: 20px;
 }
-  
-  .espacios{
-    white-space: pre-wrap;
-  }
+
+//Color del buton cerrar de los modales
+.close {
+  color: red;
+  opacity: 1;
+  font-size: 25px;
+}
+
+.espacios {
+  white-space: pre-wrap;
+}
 
 .td_min {
-    max-width: 250px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
+  max-width: 250px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 
-  .textCenter{
-    text-align: center;
-  }
+.textCenter {
+  text-align: center;
+}
 
-  .btn{
-    border-radius: 4px;
-    padding: 0.02rem;
-  }
+.btn {
+  border-radius: 4px;
+  padding: 0.02rem;
+}
 
 
-  .imglogin{
-    background: transparent;
-    background-image: url(assets/img/portada/fondo1.jpg);
-    height: 100%;
-    /* Para dejar la imagen de fondo centrada, vertical yhorizontalmente */
-    background-position: center center;
+.imglogin {
+  background: transparent;
+  background-image: url(assets/img/portada/fondo1.jpg);
+  height: 100%;
+  /* Para dejar la imagen de fondo centrada, vertical yhorizontalmente */
+  background-position: center center;
 
-    /* Para que la imagen de fondo no se repita */
-    background-repeat: no-repeat;
+  /* Para que la imagen de fondo no se repita */
+  background-repeat: no-repeat;
 
-    /* La imagen se fija en la ventana de visualización para que la altura de la imagen no supere a la del contenido */
-    background-attachment: fixed;
+  /* La imagen se fija en la ventana de visualización para que la altura de la imagen no supere a la del contenido */
+  background-attachment: fixed;
 
-    /* La imagen de fondo se reescala automáticamente con el cambio del ancho de ventana del navegador */
-    background-size: cover;
+  /* La imagen de fondo se reescala automáticamente con el cambio del ancho de ventana del navegador */
+  background-size: cover;
 
-  }
+}
 
-  .imgloginCard{
-    background: transparent;
-    background-image: url(assets/img/portada/fondo2.jpg);
-    height: 100%;
-    /* Para dejar la imagen de fondo centrada, vertical yhorizontalmente */
-    background-position: center center;
+.imgloginCard {
+  background: transparent;
+  background-image: url(assets/img/portada/fondo2.jpg);
+  height: 100%;
+  /* Para dejar la imagen de fondo centrada, vertical yhorizontalmente */
+  background-position: center center;
 
-    /* Para que la imagen de fondo no se repita */
-    background-repeat: no-repeat;
+  /* Para que la imagen de fondo no se repita */
+  background-repeat: no-repeat;
 
-    /* La imagen se fija en la ventana de visualización para que la altura de la imagen no supere a la del contenido */
-    background-attachment: fixed;
+  /* La imagen se fija en la ventana de visualización para que la altura de la imagen no supere a la del contenido */
+  background-attachment: fixed;
 
-    /* La imagen de fondo se reescala automáticamente con el cambio del ancho de ventana del navegador */
-    background-size: cover;
-  }
+  /* La imagen de fondo se reescala automáticamente con el cambio del ancho de ventana del navegador */
+  background-size: cover;
+}
 
-  .portadaButton{
-    font-size: 22px;
-    width: 100%;
-    border-radius: 4px;
-  }
+.portadaButton {
+  font-size: 22px;
+  width: 100%;
+  border-radius: 4px;
+}
 
-  .loginButton{
-    font-size: 22px;
-    width: 100%;
-    border-radius: 4px;
-    margin-top: 7px;
-    margin-bottom: 7px;
-  }
+.loginButton {
+  font-size: 22px;
+  width: 100%;
+  border-radius: 4px;
+  margin-top: 7px;
+  margin-bottom: 7px;
+}
 
-  .colorBorder{
-    border-radius: 5px;
-    font-size: 16px;
-    width: 35px;
-  }
+.colorBorder {
+  border-radius: 5px;
+  font-size: 16px;
+  width: 35px;
+}
 
-  .bold{
-    font-weight: bold;
-  }
+.bold {
+  font-weight: bold;
+}
 
-  .italic{
-    font-style: italic;
-  }
-  
-  .center{
-    text-align: center;
-  }
+.italic {
+  font-style: italic;
+}
 
-  .right{
-    text-align: right;
-  }
+.center {
+  text-align: center;
+}
 
-  .justify{
-    text-align: justify;
-  }
+.right {
+  text-align: right;
+}
 
-  .templateStyle{
-    text-align: justify;
-    margin-left: 10px;
-    margin-right: 10px;
-    font-size: 16px;
-  }
+.justify {
+  text-align: justify;
+}
 
-  ._templateStyle{
-    text-align: center;
-    margin-left: 10px;
-    margin-right: 10px;
-    font-size: 17px;
-  }
+.templateStyle {
+  text-align: justify;
+  margin-left: 10px;
+  margin-right: 10px;
+  font-size: 16px;
+}
 
-  .templateHeader{
-    font-size: 25px;
-    color: rgb(43, 161, 207);
-  }
+._templateStyle {
+  text-align: center;
+  margin-left: 10px;
+  margin-right: 10px;
+  font-size: 17px;
+}
 
-  .templateBodyColor{
-    background-color: rgb(198, 231, 238);
-  }
+.templateHeader {
+  font-size: 25px;
+  color: rgb(43, 161, 207);
+}
 
-  .tabl_eHeader_Color{
-    background-color: rgb(159, 183, 207)
-  }
+.templateBodyColor {
+  background-color: rgb(198, 231, 238);
+}
 
-  .textarea {
-    text-align: justify;
-  }
+.tabl_eHeader_Color {
+  background-color: rgb(159, 183, 207)
+}
 
-  .buttonCheckbox{
-    font-size: 15px;
-    width: 35px;
-    color: white;
-  }
+.textarea {
+  text-align: justify;
+}
 
-  .cardLoginStyle{
-    border-top: rgb(144, 198, 219) 10px solid;
-    border-bottom: rgb(144, 198, 219) 10px solid;
-    border-left: rgb(144, 198, 219) 10px solid;
-    border-right: rgb(144, 198, 219) 10px solid;
-  }
+.buttonCheckbox {
+  font-size: 15px;
+  width: 35px;
+  color: white;
+}
 
-  
-  .buttonSize_Save{
-    font-size: 19px;
-    width: 90px;
-    border-radius: 4px;
-  }
+.cardLoginStyle {
+  border-top: rgb(144, 198, 219) 10px solid;
+  border-bottom: rgb(144, 198, 219) 10px solid;
+  border-left: rgb(144, 198, 219) 10px solid;
+  border-right: rgb(144, 198, 219) 10px solid;
+}
 
-  .buttonSize_Closed{
-    font-size: 19px;
-    width: 90px;
-    border-radius: 4px;
-    margin-right: 40px;
-  }
 
-  .buttonSize_Standar_Save{
-    font-size: 19px;
-    width: 90px;
-    border-radius: 4px;
-  }
+.buttonSize_Save {
+  font-size: 19px;
+  width: 90px;
+  border-radius: 4px;
+}
 
-  .buttonSize_Standar_Close{
-    font-size: 19px;
-    width: 90px;
-    border-radius: 4px;
-  }
+.buttonSize_Closed {
+  font-size: 19px;
+  width: 90px;
+  border-radius: 4px;
+  margin-right: 40px;
+}
 
-  .portadaLoginButton{
-    font-size: 17px;
-    width: 140px;
-    border-radius: 4px;
-  }
+.buttonSize_Standar_Save {
+  font-size: 19px;
+  width: 90px;
+  border-radius: 4px;
+}
 
-  .portadaRegisterButton{
-    font-size: 17px;
-    width: 140px;
-    border-radius: 4px;
-  }
+.buttonSize_Standar_Close {
+  font-size: 19px;
+  width: 90px;
+  border-radius: 4px;
+}
 
-  .marqueeStyle_Login{
-    font-size: 20px;
-    width: 100%;
-  }
+.portadaLoginButton {
+  font-size: 17px;
+  width: 140px;
+  border-radius: 4px;
+}
 
-  .style_NavButton{
-    margin-right: 5px;
-  }
-  
-  .navbar-toggler {
-    padding: 0.25rem 0.75rem;
-    font-size: 1.09375rem;
-    line-height: 2;
-    background-color: rgb(146, 193, 240);
-    border: 1px solid transparent;
-    border-radius: 0.25rem;
-    margin-left: 30px;
-    font-weight: bold;
-  }
+.portadaRegisterButton {
+  font-size: 17px;
+  width: 140px;
+  border-radius: 4px;
+}
+
+.marqueeStyle_Login {
+  font-size: 20px;
+  width: 100%;
+}
+
+.style_NavButton {
+  margin-right: 5px;
+}
+
+.navbar-toggler {
+  padding: 0.25rem 0.75rem;
+  font-size: 1.09375rem;
+  line-height: 2;
+  background-color: rgb(146, 193, 240);
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  margin-left: 30px;
+  font-weight: bold;
+}
+
+
+//Muestra un sombra en el tr de una tabla
+.sortable tr {
+  cursor: pointer;
+}

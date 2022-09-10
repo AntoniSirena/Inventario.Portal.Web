@@ -75,8 +75,9 @@ export class InventoryComponent implements OnInit {
   timerstrInputDetail: any = 0;
 
   currentUserNameByInventory: string;
-
   objetPaginated: ObjetoPagination;
+
+  inventoryTotalValue: number = 0;
 
   constructor(
     private inventoryService: InventoryService,
@@ -105,6 +106,12 @@ export class InventoryComponent implements OnInit {
   getAll() {
     this.inventoryService.getAll().subscribe((response: Array<Inventory>) => {
       this.inventories = response;
+
+      this.inventoryTotalValue = 0;
+      
+      this.inventories.forEach(x => {
+        this.inventoryTotalValue += x.TotalAmount;
+      })
     },
       error => {
         console.log(JSON.stringify(error));
@@ -206,10 +213,10 @@ export class InventoryComponent implements OnInit {
 
     this.inventoryService.getInventoryDetails(this.currentInventory.Id).subscribe((response: Iresponse) => {
       this.inventoryDetails = response.Data;
-      this.spinnerService.hide();
+      
     },
       error => {
-        this.spinnerService.hide();
+        
         console.log(JSON.stringify(error));
       });
   }
@@ -217,17 +224,13 @@ export class InventoryComponent implements OnInit {
 
   //get inventory details
   getInventoryDetails_Paginated() {
-    this.spinnerService.show();
-    this.message = 'Cagando items...';
     this.strInputDetail = '';
 
     this.inventoryService.getInventoryDetails_Paginated(this.currentInventory.Id).subscribe((response: Iresponse) => {
       this.objetPaginated = response.Data;
-      this.inventoryDetails = this.objetPaginated.Records;
-      this.spinnerService.hide();
+      this.inventoryDetails = this.objetPaginated.Records;     
     },
-      error => {
-        this.spinnerService.hide();
+      error => {     
         console.log(JSON.stringify(error));
       });
   }
@@ -391,9 +394,10 @@ export class InventoryComponent implements OnInit {
           icon: 'success',
           title: response.Message,
           showConfirmButton: true,
-          timer: 500
+          timer: 300
         }).then(() => {
           this.showItemModalReference.close();
+          this._getInventoryDetails_Paginated_Next(1);
         });
       } else {
         Swal.fire({
