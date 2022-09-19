@@ -79,6 +79,7 @@ export class InventoryComponent implements OnInit {
 
   inventoryTotalValue: number = 0;
 
+
   constructor(
     private inventoryService: InventoryService,
     private modalService: NgbModal,
@@ -139,10 +140,12 @@ export class InventoryComponent implements OnInit {
 
   //get items
   getItems(input: string) {
-
+    this.spinnerService.show();
+    this.message = 'Cagando...';
     this.initCountItemFrom();
 
     this.inventoryService.getItems(input).subscribe((response: Iresponse) => {
+      this.spinnerService.hide();
       this.items = response.Data;
       this.searchItem = '';
 
@@ -183,6 +186,7 @@ export class InventoryComponent implements OnInit {
 
     },
       error => {
+        this.spinnerService.hide();
         console.log(JSON.stringify(error));
       });
   }
@@ -206,6 +210,19 @@ export class InventoryComponent implements OnInit {
   }
 
 
+  downloadInventoriesPDF(){
+    this.spinnerService.show();
+    this.message = 'Cagando...';
+
+    this.inventoryService.downloadInventoryPDF().subscribe((response: any) => {
+      this.spinnerService.hide();
+    },
+      error => {
+        this.spinnerService.hide();
+        console.log(JSON.stringify(error));
+      });
+  }
+
   //get inventory details
   getInventoryDetails() {
     this.spinnerService.show();
@@ -224,13 +241,17 @@ export class InventoryComponent implements OnInit {
 
   //get inventory details
   getInventoryDetails_Paginated() {
+    this.spinnerService.show();
+    this.message = 'Cagando...';
     this.strInputDetail = '';
 
     this.inventoryService.getInventoryDetails_Paginated(this.currentInventory.Id).subscribe((response: Iresponse) => {
+      this.spinnerService.hide();
       this.objetPaginated = response.Data;
       this.inventoryDetails = this.objetPaginated.Records;     
     },
-      error => {     
+      error => {
+        this.spinnerService.hide();   
         console.log(JSON.stringify(error));
       });
   }
@@ -327,9 +348,9 @@ export class InventoryComponent implements OnInit {
               icon: 'success',
               title: response.Message,
               showConfirmButton: true,
-              timer: 2000
+              timer: 1500
             }).then(() => {
-              this.getInventoryDetails();
+              this.getInventoryDetails_Paginated();
             });
           } else {
             Swal.fire({

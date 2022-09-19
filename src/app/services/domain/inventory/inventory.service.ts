@@ -54,6 +54,10 @@ export class InventoryService {
     return this.httpClient.get(this.coreURL + `api/inventory/GenerateInventoryExcel?Id=${id}`);
   }
 
+  downloadInventoryPDF(): Observable<object> {
+    return this.httpClient.get(this.coreURL + `api/inventory/GenerateInventoryPDF`);
+  }
+
   saveItem(request: Product) {
     let data = JSON.stringify(request);
     return this.httpClient.post(`${this.coreURL}api/inventory/SaveItem`, data, { headers: this.headers });
