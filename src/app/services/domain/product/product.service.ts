@@ -16,8 +16,8 @@ export class ProductService {
     this.coreURL = environment.coreURL;
   }
 
-  getAll(): Observable<object> {
-    return this.httpClient.get(this.coreURL + 'api/product/GetAll');
+  getProducts_Paginated(pageNumber: number = 1, filter: string = ''): Observable<object> {
+    return this.httpClient.get(this.coreURL + `api/product/GetProducts_Paginated?pageNumber=${pageNumber}&filter=${filter}`);
   }
 
   getById(id: number): Observable<object> {

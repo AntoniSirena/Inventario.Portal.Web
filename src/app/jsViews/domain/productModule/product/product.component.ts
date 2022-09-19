@@ -10,6 +10,7 @@ import * as XLSX from 'ts-xlsx';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { User } from '../../../../models/profile/profile';
 import { BaseService } from '../../../../services/base/base.service';
+import { ObjetPaginated } from '../../../../models/common/pagination';
 
 
 @Component({
@@ -44,6 +45,8 @@ export class ProductComponent implements OnInit {
 
   products = new Array<Product>();
   productModel = new ProductModel;
+  filter: string;
+  objetPaginated: ObjetPaginated;
 
   userData = new User();
 
@@ -57,7 +60,7 @@ export class ProductComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.getAll();
+    this.getProductsPaginated();
     this.userData = this.baseService.getUserData();
   }
 
@@ -98,14 +101,15 @@ export class ProductComponent implements OnInit {
   }
 
 
-  getAll() {
+  getProductsPaginated() {
     this.spinnerService.show();
-    this.loadingMessage = 'Cargando items';
+    this.loadingMessage = 'Cargando...';
+    this.filter = '';
 
-    this.productService.getAll().subscribe((response: Array<Product>) => {
-      this.products = response;
-
+    this.productService.getProducts_Paginated().subscribe((response: Iresponse) => {
       this.spinnerService.hide();
+      this.objetPaginated = response.Data;
+      this.products = this.objetPaginated.Records;    
     },
       error => {
         this.spinnerService.hide();
@@ -113,6 +117,21 @@ export class ProductComponent implements OnInit {
       });
   }
 
+  _getProductsPaginated(numberPage: number) {
+    this.productService.getProducts_Paginated(numberPage, this.filter).subscribe((response: Iresponse) => {
+      if (response.Data?.Pagination) {
+        this.objetPaginated = response.Data;
+        this.products = this.objetPaginated.Records;
+      } else {
+        this.products = response.Data;
+      }
+    },
+      error => {
+        console.log(JSON.stringify(error));
+      });
+
+  }
+  
 
   getById(id: number) {
     this.productService.getById(id).subscribe((response: ProductModel) => {
@@ -180,7 +199,7 @@ export class ProductComponent implements OnInit {
               showConfirmButton: true,
               timer: 2000
             }).then(() => {
-              this.getAll();
+              this.getProductsPaginated();
               this.modalService.dismissAll();
             });
           } else {
@@ -235,7 +254,7 @@ export class ProductComponent implements OnInit {
           showConfirmButton: true,
           timer: 2000
         }).then(() => {
-          this.getAll();
+          this.getProductsPaginated();
           this.modalService.dismissAll();
         });
       } else {
@@ -286,7 +305,7 @@ export class ProductComponent implements OnInit {
           showConfirmButton: true,
           timer: 2000
         }).then(() => {
-          this.getAll();
+          this.getProductsPaginated();
           this.modalService.dismissAll();
         });
       } else {
@@ -327,7 +346,7 @@ export class ProductComponent implements OnInit {
               showConfirmButton: true,
               timer: 2000
             }).then(() => {
-              this.getAll();
+              this.getProductsPaginated();
               this.modalService.dismissAll();
             });
           } else {

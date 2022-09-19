@@ -1,6 +1,6 @@
 
 
-export class ObjetoPagination {
+export class ObjetPaginated {
     Records: any;
     Pagination: Pagination;
 }

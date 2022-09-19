@@ -21,12 +21,21 @@
     </div>
 
     <br>
+    <br>
+
+    <div class="row">
+      <div class="col-md-4">
+        <span class="bold" style="font-size: 22px;">Total de items : {{objetPaginated?.Pagination?.TotalRecord}}</span>
+      </div>
+    </div>
+
+    <br>
   
     <div class="row">
       <div class="col-xs-12 col-sm-12 col-lg-12">
         <div class="form-group">
-          <input type="text" class="form-control" placeholder="Buscar" [(ngModel)]="searchText2"
-            [ngModelOptions]="{standalone: true}">
+          <input type="text" class="form-control" placeholder="Ingrese un criterío de busqueda" [(ngModel)]="filter"
+            [ngModelOptions]="{standalone: true}" (keyup.enter)="_getProductsPaginated(1)">
         </div>
       </div>
     </div>
@@ -50,7 +59,7 @@
         </thead>
         <tbody>
           <tr
-            *ngFor="let item of products | filter : searchText2 | paginate: { itemsPerPage: 12, currentPage: p1, id: 'page1'}">
+            *ngFor="let item of products | paginate: { itemsPerPage: objetPaginated?.Pagination?.PageRow, currentPage: p1, totalItems: objetPaginated?.Pagination?.TotalRecord, id: 'page1'}">
             <td>{{item.Id}}</td>
             <td>{{item.ExternalCode}}</td>
             <td>{{item.Description}}</td>
@@ -66,8 +75,7 @@
           </tr>
         </tbody>
       </table>
-      <pagination-controls (pageChange)="p1 = $event" id="page1" autoHide="true" responsive="true" previousLabel="Anterior"
-        nextLabel="Siguiente">
+      <pagination-controls (pageChange)="_getProductsPaginated((p1 = $event))" id="page1" previousLabel="Anterior" nextLabel="Siguiente">
       </pagination-controls>
     </div>
   

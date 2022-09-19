@@ -14,7 +14,7 @@ import { environment } from '../../../../../environments/environment';
 import { User } from '../../../../../models/profile/profile';
 import { Section } from './../../../../../models/domain/inventory';
 import { Roles } from '../../../../../configurations/jsConfig';
-import { ObjetoPagination } from './../../../../../models/common/pagination';
+import { ObjetPaginated } from './../../../../../models/common/pagination';
 
 
 
@@ -75,7 +75,7 @@ export class InventoryComponent implements OnInit {
   timerstrInputDetail: any = 0;
 
   currentUserNameByInventory: string;
-  objetPaginated: ObjetoPagination;
+  objetPaginated: ObjetPaginated;
 
   inventoryTotalValue: number = 0;
 
