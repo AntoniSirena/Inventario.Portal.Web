@@ -78,7 +78,7 @@ export class InventoryComponent implements OnInit {
   objetPaginated: ObjetPaginated;
 
   inventoryTotalValue: number = 0;
-
+  CurrentItemsPage: number = 0;
 
   constructor(
     private inventoryService: InventoryService,
@@ -279,6 +279,7 @@ export class InventoryComponent implements OnInit {
   getInventoryDetails_Paginated_Next(numbePage?: any) {
     clearTimeout(this.timerstrInputDetail);
     this.timerstrInputDetail = setTimeout(() => {
+      this.CurrentItemsPage = numbePage;
       this._getInventoryDetails_Paginated_Next(numbePage);
     }, 1000);
   }
@@ -421,7 +422,11 @@ export class InventoryComponent implements OnInit {
           timer: 300
         }).then(() => {
           this.showItemModalReference.close();
-          this._getInventoryDetails_Paginated_Next(1);
+          if(this.originSaveItem === 'ADD'){
+            this._getInventoryDetails_Paginated_Next(1);
+          }else{
+            this._getInventoryDetails_Paginated_Next(this.CurrentItemsPage);
+          }
         });
       } else {
         Swal.fire({
