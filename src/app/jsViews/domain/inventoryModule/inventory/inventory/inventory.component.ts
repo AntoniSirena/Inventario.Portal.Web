@@ -105,6 +105,7 @@ export class InventoryComponent implements OnInit {
   }
 
   getAll() {
+    this.spinnerService.show();
     this.inventoryService.getAll().subscribe((response: Array<Inventory>) => {
       this.inventories = response;
 
@@ -113,8 +114,10 @@ export class InventoryComponent implements OnInit {
       this.inventories.forEach(x => {
         this.inventoryTotalValue += x.TotalAmount;
       })
+      this.spinnerService.hide();
     },
       error => {
+        this.spinnerService.hide();
         console.log(JSON.stringify(error));
       });
   }

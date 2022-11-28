@@ -7,7 +7,8 @@
 
 <div *ngIf="canDoInventory">
 
-  <h3>Inventarios a la fecha</h3>
+  <br>
+  <h3 style="text-align: center;">Inventarios a la fecha</h3>
   <br>
 
   <div class="row" *ngIf="canCreate">
@@ -15,16 +16,8 @@
       <button type="button" class="btn btn-primary btn-large btn-block bold" style="font-size: 17px;"
         (click)="openCreateModal()">Aperturar inventario</button>
     </div>
-
-    <div class="col-md-3">
-      <button type="button" class="btn btn-success btn-large btn-block bold" style="font-size: 17px;"
-        (click)="getAll()"><i class="fa fa-refresh" aria-hidden="true"></i>&nbsp;&nbsp;Refrescar</button>
-    </div>
-
   </div>
 
-  <br>
-  <br>
   <br>
   <br>
 
@@ -112,7 +105,21 @@
 
   <br>
   <br>
+  <div class="row" *ngIf="showProducExistence">
+    <div class="col-md-4">
+    </div>
+
+    <div class="col-md-4">
+      <button type="button" class="btn btn-success btn-large btn-block bold" style="font-size: 17px;"
+        (click)="getAll()"><i class="fa fa-refresh" aria-hidden="true"></i>&nbsp;&nbsp;Refrescar</button>
+    </div>
+
+    <div class="col-md-4">
+    </div>
+  </div>
+
   <br>
+
   <div class="row" *ngIf="showProducExistence">
 
     <div class="col-md-4">
@@ -218,7 +225,7 @@
 <!--Edit count item-->
 <ng-template #countItemModal let-modal>
   <div class="modal-header">
-    <h4 class="modal-title">Conteo físico de mercancías perteneciente al usuario: <span style="color: red;">{{currentUserNameByInventory}}</span> </h4>
+    <h4 class="modal-title">Conteo físico de: <span style="color: red;">{{currentUserNameByInventory}}</span> </h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
