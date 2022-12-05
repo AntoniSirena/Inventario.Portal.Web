@@ -216,3 +216,7 @@
 .sortable tr {
   cursor: pointer;
 }
+
+.full-size .modal-dialog { 
+  max-width: 86%;
+}

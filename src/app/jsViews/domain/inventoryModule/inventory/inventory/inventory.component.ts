@@ -110,7 +110,7 @@ export class InventoryComponent implements OnInit {
       this.inventories = response;
 
       this.inventoryTotalValue = 0;
-      
+
       this.inventories.forEach(x => {
         this.inventoryTotalValue += x.TotalAmount;
       })
@@ -213,7 +213,7 @@ export class InventoryComponent implements OnInit {
   }
 
 
-  downloadInventoriesPDF(){
+  downloadInventoriesPDF() {
     this.spinnerService.show();
     this.message = 'Cagando...';
 
@@ -233,10 +233,10 @@ export class InventoryComponent implements OnInit {
 
     this.inventoryService.getInventoryDetails(this.currentInventory.Id).subscribe((response: Iresponse) => {
       this.inventoryDetails = response.Data;
-      
+
     },
       error => {
-        
+
         console.log(JSON.stringify(error));
       });
   }
@@ -251,17 +251,16 @@ export class InventoryComponent implements OnInit {
     this.inventoryService.getInventoryDetails_Paginated(this.currentInventory.Id).subscribe((response: Iresponse) => {
       this.spinnerService.hide();
       this.objetPaginated = response.Data;
-      this.inventoryDetails = this.objetPaginated.Records;     
+      this.inventoryDetails = this.objetPaginated.Records;
     },
       error => {
-        this.spinnerService.hide();   
+        this.spinnerService.hide();
         console.log(JSON.stringify(error));
       });
   }
 
   //get inventory details
   _getInventoryDetails_Paginated_Next(numbePage?: any) {
-
     this.inventoryService.getInventoryDetails_Paginated(this.currentInventory.Id, numbePage, this.strInputDetail).subscribe((response: Iresponse) => {
       if (response.Data?.Pagination) {
         this.objetPaginated = response.Data;
@@ -273,7 +272,6 @@ export class InventoryComponent implements OnInit {
       error => {
         console.log(JSON.stringify(error));
       });
-
   }
 
   getInventoryDetails_Paginated_Next(numbePage?: any) {
@@ -281,7 +279,7 @@ export class InventoryComponent implements OnInit {
     this.timerstrInputDetail = setTimeout(() => {
       this.CurrentItemsPage = numbePage;
       this._getInventoryDetails_Paginated_Next(numbePage);
-    }, 1000);
+    }, 200);
   }
 
 
@@ -422,9 +420,9 @@ export class InventoryComponent implements OnInit {
           timer: 300
         }).then(() => {
           this.showItemModalReference.close();
-          if(this.originSaveItem === 'ADD'){
+          if (this.originSaveItem === 'ADD') {
             this._getInventoryDetails_Paginated_Next(1);
-          }else{
+          } else {
             this._getInventoryDetails_Paginated_Next(this.CurrentItemsPage);
           }
         });
@@ -651,7 +649,7 @@ export class InventoryComponent implements OnInit {
     this.getInventoryDetails_Paginated();
     this.currentUserNameByInventory = inventory.UserName;
 
-    this.modalService.open(this.countItemModal, { size: 'xl', backdrop: 'static', scrollable: true });
+    this.modalService.open(this.countItemModal, { windowClass: 'full-size', backdrop: 'static', scrollable: true });
     this.setFocus_SearchItems();
   }
 

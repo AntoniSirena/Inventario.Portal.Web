@@ -429,7 +429,7 @@
         <tbody>
           <tr
             *ngFor="let item of items | filter : searchText | paginate: { itemsPerPage: 10, currentPage: p3, id: 'page3'}">
-            <td class="right"> <button type="button" class="btn btn-primary bold"
+            <td> <button type="button" class="btn btn-primary bold"
               (click)="addItemToCount(item)">Seleccionar</button> </td>
             <td>{{item.ExternalCode}}</td>
             <td>{{item.Description}}</td>
